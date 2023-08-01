@@ -1,7 +1,7 @@
 # Jebbys-Jailbreak
 **A set of tools used to circumvent Impero, fully coded in Python.**
 
-*This is a compilation of an increasing set of tools used to circumvent Impero's restrictions on work computers.*
+*This is a compilation of an increasing set of tools used to circumvent Impero's restrictions on computers.*
 
 ---
 
@@ -17,5 +17,24 @@
 
 ---
 
+## Features:
+- **Get the system's info**
+- **Get the wifi username(s) & password(s)**
+- **Get the path of window's executables**
+- **"Jebby's method" on running & retrieving blocked executables (other file types *may* be supported)**
+=> Executables and/or other file types which require admin permissions may not run as intended, as for now... perhaps.
+
+---
+
 ## Notes:
-- nuthin
+- If you encounter any issues then please file an 'Issues' report.
+
+---
+
+### DISCLAIMER:
+
+**I am not and will never be responsible for, including but not limited to, if any unintended effects occur and/or if punishment occurs.**
+
+**This, alongside with any future/past revision of this project under any nature, is for educational purposes only.**
+
+
