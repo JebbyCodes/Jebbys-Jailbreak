@@ -23,7 +23,17 @@ window = Tk()
 window.title("Jebby's Jailbreak")
 window.iconbitmap(iconAlt)
 
-
+#############################################################################################################
+def clearMainhomeScreen():
+    fetchWifibutton.forget()
+    fetchInfobutton.forget()
+    fetchExebutton.forget()
+    jebbyScriptbutton.forget()
+    canvasMain.pack_forget()
+    canvasMain.forget()
+    nextPagelabel.place_forget()
+    forwardPagebutton.place_forget()
+    backPagebutton.place_forget()
 #############################################################################################################
 def center_window(window, width, height):
     # Get the screen width and height
@@ -47,7 +57,6 @@ window_frame.pack(fill=tk.BOTH, expand=True)
 
 def forget_all_widgets(window_frame):
     for widget in window_frame.winfo_children():
-        #if widget is not fetchInfobutton:
         widget.pack_forget()
 
 #############################################################################################################
@@ -55,20 +64,11 @@ def move_home_button_to_front():
     homeButton.lift() 
 #############################################################################################################
 def fetchInfopressed():
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
-    #homeButton.lift()
-    fetchWifibutton.forget()
-    fetchInfobutton.forget()
-    fetchExebutton.forget()
-    jebbyScriptbutton.forget()
-    canvasMain.pack_forget()
-    canvasMain.forget()
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
+    clearMainhomeScreen()
+
     homeButton.place(x=0, y=300)
-    #homeButton.lift()
    
     window_frame.pack_propagate(False)
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
 
     # Platform Processor
     platformprocessor = Label(window_frame, text=f"\nPlatform processor:\n {platform.processor()}", wraplength=200)
@@ -105,28 +105,20 @@ def fetchInfopressed():
     platformarc.configure(font=(font, 8), bg=background, fg="white")
     platformarc.pack()
     
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
-    #homeButton.lift()
 
 ####################################################################################################################################
 def fetch_wifi_thread():
-    #window_frame.config(bg="RoyalBlue4")
-    #canvasMain.config(bg="RoyalBlue4")
-    #window.config(bg="RoyalBlue4")
     def fetch_wifi():
-        #homeButton.pack(side=tk.LEFT, anchor=tk.S)
         homeButton.place(x=0, y=300)
 
         fetchWifibutton.config(state=tk.DISABLED)
         fetchInfobutton.config(state=tk.DISABLED)
         fetchExebutton.config(state=tk.DISABLED)
         jebbyScriptbutton.config(state=tk.DISABLED)
-        fetchWifibutton.forget()
-        fetchInfobutton.forget()
-        fetchExebutton.forget()
-        jebbyScriptbutton.forget()
-        canvasMain.pack_forget()
-        #homeButton.pack(side=tk.LEFT, anchor=tk.S)
+        nextPagelabel.config(state=tk.DISABLED)
+        forwardPagebutton.config(state=tk.DISABLED)
+        backPagebutton.config(state=tk.DISABLED)
+        clearMainhomeScreen()
 
         
 
@@ -149,19 +141,16 @@ def fetch_wifi_thread():
                 results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', i, 'key=clear']).decode('utf-8', errors="ignore").split('\n')
                 results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
                 try:
-                    #print ("{:<15}|  {:<}".format(i, results[0]))
                     WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                     WifiUsertext.insert(tk.END, "{:<15}| {:<}".format(i, results[0]))
                     WifiUsertext.pack(pady=7)
                     WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
                 except IndexError:
-                    #print ("{:<15}|  {:<}".format(i, ""))
                     WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                     WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, ""))
                     WifiUsertext.pack(pady=7)
                     WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
             except subprocess.CalledProcessError:
-                #print ("{:<15}|  {:<}".format(i, "ENCODING ERROR"))
                 WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                 WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, "ENCODING ERROR"))
                 WifiUsertext.pack(pady=7)
@@ -171,7 +160,9 @@ def fetch_wifi_thread():
         fetchInfobutton.config(state=tk.NORMAL)
         fetchExebutton.config(state=tk.NORMAL)
         jebbyScriptbutton.config(state=tk.NORMAL)
-    #a = input("")
+        nextPagelabel.config(state=tk.NORMAL)
+        forwardPagebutton.config(state=tk.NORMAL)
+        backPagebutton.config(state=tk.NORMAL)
 
     thread = threading.Thread(target=fetch_wifi)
     thread.start()
@@ -179,17 +170,9 @@ def fetch_wifi_thread():
 
 ####################################################################################################################################
 def fetchExe():
-    #window.pack_propagate(FALSE)
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
     homeButton.place(x=0, y=300)
 
-    fetchWifibutton.forget()
-    fetchInfobutton.forget()
-    fetchExebutton.forget()
-    jebbyScriptbutton.forget()
-    canvasMain.pack_forget()
-
-    #homeButton.pack(side=tk.LEFT, anchor=tk.S)
+    clearMainhomeScreen()
 
     invisiLabel = Label(window_frame, text="")
     invisiLabel.pack(pady=15)
@@ -200,8 +183,6 @@ def fetchExe():
 
 
     def getExeentry():
-        #user_input = text.get()
-        #print(user_input)
     
         insertPath = exeEntry.get()
         path = shutil.which(insertPath) 
@@ -209,8 +190,6 @@ def fetchExe():
         if path is None:
             GotExePath.forget()
             NoExePath.config(text="Error: No Path Found", bg='white')
-            #GotExePath.pack_forget()
-            #GotExePath.insert(tk.END, "")
         else:
             GotExePath.config(state=tk.NORMAL, highlightthickness=0)
             GotExePath.delete("1.0", tk.END)
@@ -228,19 +207,13 @@ def fetchExe():
     NoExePath.pack()
     GotExePath = tk.Text(window_frame, wrap=tk.WORD, height=3, width=20)
     GotExePath.insert(tk.END, "")
-    #GotExePath.config(bg=background)
-    #GotExePath.pack()
     GotExePath.config(state=tk.DISABLED, highlightthickness=0)
 
 
 ####################################################################################################################################
 def jebbyScriptpressed():
     homeButton.place(x=0, y=300)
-    fetchWifibutton.forget()
-    fetchInfobutton.forget()
-    fetchExebutton.forget()
-    jebbyScriptbutton.forget()
-    canvasMain.pack_forget()
+    clearMainhomeScreen()
 
     invisiLabel = Label(window_frame, text="")
     invisiLabel.pack(pady=15)
@@ -338,17 +311,30 @@ def homePressed():
     jebbyScriptbutton.pack()
     canvasMain.pack()
     homeButton.place_forget()
-    #homeButton.forget()
+    nextPagelabel.place(x=105, y=165)
+    forwardPagebutton.place(x=168, y=165)
 
 homeButton = Button(window, text="Home", command=homePressed)
 homeButton.config(fg = "white", bg = "RoyalBlue4")
+####################################################################################################################################
+nextPagelabel = Label(window, text="Next Page")
+nextPagelabel.config(fg = "white", bg = "RoyalBlue3")
+nextPagelabel.place(x=105, y=165)
 
+forwardPagebutton = Button(window, text="=>")
+forwardPagebutton.config(width=2, height=1)
+forwardPagebutton.place(x=168, y=165)
+
+backPagebutton = Button(window, text="<=")
+backPagebutton.config(width=2, height=1)
+backPagebutton.place(x=79, y=165)
+backPagebutton.place_forget()
+####################################################################################################################################
 window_frame['bg']='#222027'
 canvasMain = Canvas(window_frame, bg='#222027', highlightthickness=0)
 canvasMain.pack(fill=tk.BOTH, expand=True)
 
 
-#canvasMain.create_oval(x0, y0, x1, y1, fill="grey", outline="")
 canvasMain.create_oval(0,265,275,60, fill="RoyalBlue4", outline="")
 
 canvasMain.create_oval(50,115,75,130, fill="RoyalBlue1", outline="") #left eye
@@ -357,27 +343,6 @@ canvasMain.create_oval(150,115,175,130, fill="RoyalBlue1", outline="") #right ey
 canvasMain.create_line(175,80,200,36, fill="RoyalBlue1", width=5) #right antenna
 canvasMain.create_line(75,80,40,36, fill="RoyalBlue1", width=5) #left antenna
 
-#circles = []
-#for x in range(1, 13): #upper circles
-    #xa = 10 + (x - 1) * 25
-    #ya = 80
-    #xb = 10 + x * 25
-    #yb = 60
 
-    #circle_tag = f"circle{x}"
-
-    #circle = canvasMain.create_oval(xa-10,ya-10,xb-10,yb-10, fill="SteelBlue4", outline="", tags=circle_tag)
-    #canvasMain.tag_lower(circle_tag)
-
-    #circles.append(circle)
-
-#def change_circle_color():
-    # List of circle indices to change color (3, 6, and 9 in this example)
-    #selected_circle_indices = [1,2,3,4,8,9,10,11,12]
-
-    #for index in selected_circle_indices:
-        #if 1 <= index <= len(circles):
-            #circle = circles[index - 1]  # Adjust the index to match the list index (0-based)
-            #canvasMain.itemconfig(circle, fill="red", outline="")
 
 window.mainloop()
