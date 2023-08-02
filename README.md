@@ -12,6 +12,18 @@
 ---
 
 ## How to run:
+### **Stable Release:**
+- [1] Download & extract the `Jebby's Jailbreak.zip` file from the provided link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v7)
+- [2] Run the `Jebby's Jailbreak.pyw` file inside.
+
+*OR*
+
+- [1] Download & extract the `Jebby.s.Jailbreak.zip` file from the provided asset link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v7)
+- [2] Run the `Jebby's Jailbreak.pyw` file inside.
+
+=======================================
+
+### **Experimental Release:**
 - [1] - Download the `Jebby's Jailbreak` folder.
 - [2] - Run the `Jebby's Jailbreak.pyw` file inside.
 
