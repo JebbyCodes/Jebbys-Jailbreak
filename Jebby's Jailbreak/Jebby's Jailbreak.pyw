@@ -1,4 +1,4 @@
-## 22/7/23 V7 - Release
+## 22/7/23 V7 - Experimental
 import platform #sysinfo
 import subprocess #wifi
 import shutil #filefinder
@@ -34,6 +34,7 @@ def clearMainhomeScreen():
     nextPagelabel.place_forget()
     forwardPagebutton.place_forget()
     backPagebutton.place_forget()
+    
 #############################################################################################################
 def center_window(window, width, height):
     # Get the screen width and height
@@ -60,13 +61,11 @@ def forget_all_widgets(window_frame):
         widget.pack_forget()
 
 #############################################################################################################
-def move_home_button_to_front():
-    homeButton.lift() 
-#############################################################################################################
 def fetchInfopressed():
     clearMainhomeScreen()
 
     homeButton.place(x=0, y=300)
+    homeButton.config(command=homePressed)
    
     window_frame.pack_propagate(False)
 
@@ -110,6 +109,7 @@ def fetchInfopressed():
 def fetch_wifi_thread():
     def fetch_wifi():
         homeButton.place(x=0, y=300)
+        homeButton.config(command=homePressed)
 
         fetchWifibutton.config(state=tk.DISABLED)
         fetchInfobutton.config(state=tk.DISABLED)
@@ -171,6 +171,7 @@ def fetch_wifi_thread():
 ####################################################################################################################################
 def fetchExe():
     homeButton.place(x=0, y=300)
+    homeButton.config(command=homePressed)
 
     clearMainhomeScreen()
 
@@ -213,6 +214,7 @@ def fetchExe():
 ####################################################################################################################################
 def jebbyScriptpressed():
     homeButton.place(x=0, y=300)
+    homeButton.config(command=homePressed)
     clearMainhomeScreen()
 
     invisiLabel = Label(window_frame, text="")
@@ -283,6 +285,31 @@ def jebbyScriptpressed():
     jebbyButton = Button(window_frame, text="Jailbreak!", fg = "white", bg = "RoyalBlue4", command=jebButtonpressed)
     jebbyButton.config(width=15, height=2)
     jebbyButton.pack()
+
+####################################################################################################################################
+
+####################################################################################################################################
+
+def ChangeBackground():
+    forget_all_widgets(window_frame)
+    nextPagelabel.place_forget()
+    backPagebutton.place_forget()
+    homeButton.place(x=0, y=300)
+    homeButton.config(command=Page2Pressed)
+
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.config(bg=background)
+    invisiLabel.pack(pady=5)
+
+    bgPathEntry = Entry(window_frame)
+    bgPathEntry.pack(side=tk.TOP, padx=30, fill=tk.X, ipady=5)
+
+    setBgButton = Button(window_frame, text="Set as background!")
+    setBgButton.config(width=15, height=2, fg = "white", bg = "RoyalBlue4")
+    setBgButton.pack()
+
+
+
 ####################################################################################################################################
 
 fetchInfobutton = Button(window_frame, text="Fetch Sys Info", command=fetchInfopressed)
@@ -314,18 +341,53 @@ def homePressed():
     nextPagelabel.place(x=105, y=165)
     forwardPagebutton.place(x=168, y=165)
 
+
 homeButton = Button(window, text="Home", command=homePressed)
 homeButton.config(fg = "white", bg = "RoyalBlue4")
 ####################################################################################################################################
+def Page2Pressed():
+    forget_all_widgets(window_frame)
+    homeButton.place_forget()
+    clearMainhomeScreen()
+    nextPagelabel.place(x=105, y=165)
+    forwardPagebutton.place_forget()
+    backPagebutton.place(x=79, y=165)
+    canvasMain.pack_forget()
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    ChgBgButton = Button(window_frame, text="Change Desktop Background", command=ChangeBackground)
+    ChgBgButton.config(width=25, height=2, fg = "white", bg = "RoyalBlue4")
+    ChgBgButton.pack()
+    
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.config(bg=background)
+    invisiLabel.pack(pady=5)
+
+    testButton = Button(window_frame, text="TEST")
+    testButton.config(width=15, height=2, fg = "white", bg = "RoyalBlue4")
+    testButton.pack()
+
+
+def Page1Pressed():
+    forget_all_widgets(window_frame) #forget the next page's widgets, then display the new stuff
+    fetchInfobutton.pack()
+    fetchWifibutton.pack()
+    fetchExebutton.pack()
+    jebbyScriptbutton.pack()
+    forwardPagebutton.place(x=168, y=165)
+    backPagebutton.place_forget()
+    canvasMain.pack()
+    
+
 nextPagelabel = Label(window, text="Next Page")
 nextPagelabel.config(fg = "white", bg = "RoyalBlue3")
 nextPagelabel.place(x=105, y=165)
 
-forwardPagebutton = Button(window, text="=>")
+forwardPagebutton = Button(window, text="=>", command=Page2Pressed)
 forwardPagebutton.config(width=2, height=1)
 forwardPagebutton.place(x=168, y=165)
 
-backPagebutton = Button(window, text="<=")
+backPagebutton = Button(window, text="<=", command=Page1Pressed)
 backPagebutton.config(width=2, height=1)
 backPagebutton.place(x=79, y=165)
 backPagebutton.place_forget()
@@ -342,7 +404,7 @@ canvasMain.create_oval(150,115,175,130, fill="RoyalBlue1", outline="") #right ey
 
 canvasMain.create_line(175,80,200,36, fill="RoyalBlue1", width=5) #right antenna
 canvasMain.create_line(75,80,40,36, fill="RoyalBlue1", width=5) #left antenna
-
+####################################################################################################################################
 
 
 window.mainloop()
