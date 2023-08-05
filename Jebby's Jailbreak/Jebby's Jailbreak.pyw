@@ -304,7 +304,37 @@ def ChangeBackground():
     bgPathEntry = Entry(window_frame)
     bgPathEntry.pack(side=tk.TOP, padx=30, fill=tk.X, ipady=5)
 
-    setBgButton = Button(window_frame, text="Set as background!")
+    errorExtensionLabel = Label(window_frame, text="Error: Extension is NOT .gif")
+    errorExtensionLabel.forget()
+
+    chgBgDoingLabel = Label(window_frame, text="path is okay")
+    chgBgDoingLabel.forget()
+
+    errorPathLabel = Label(window_frame, text="Error: Path Not Found")
+    errorPathLabel.forget()
+
+    def confirmBgPath():
+        #IsolatedFile = os.path.basename(finalDestpath) 
+        pathExtension = os.path.splitext(os.path.basename(bgPathEntry.get()))[1]
+        if pathExtension != ".gif" and not os.path.exists(bgPathEntry.get()):
+            chgBgDoingLabel.forget()
+            errorExtensionLabel.pack()
+            errorPathLabel.pack()
+        elif pathExtension != ".gif":
+            errorPathLabel.forget()
+            chgBgDoingLabel.forget()
+            errorExtensionLabel.pack()
+        elif not os.path.exists(bgPathEntry.get()):
+            chgBgDoingLabel.forget()
+            errorExtensionLabel.forget()
+            errorPathLabel.pack()
+        else:
+            errorExtensionLabel.forget()
+            errorPathLabel.forget()
+            chgBgDoingLabel.pack()
+        
+
+    setBgButton = Button(window_frame, text="Set as background!", command=confirmBgPath)
     setBgButton.config(width=15, height=2, fg = "white", bg = "RoyalBlue4")
     setBgButton.pack()
 
@@ -363,9 +393,9 @@ def Page2Pressed():
     invisiLabel.config(bg=background)
     invisiLabel.pack(pady=5)
 
-    testButton = Button(window_frame, text="TEST")
-    testButton.config(width=15, height=2, fg = "white", bg = "RoyalBlue4")
-    testButton.pack()
+    creditsButton = Button(window_frame, text="Credits")
+    creditsButton.config(width=15, height=2, fg = "white", bg = "RoyalBlue4")
+    creditsButton.pack()
 
 
 def Page1Pressed():
