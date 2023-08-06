@@ -1,4 +1,4 @@
-## 22/7/23 V7 - Experimental
+## 22/7/23 V8 - Experimental/Stable    [https://github.com/JebbyCodes/Jebbys-Jailbreak]
 import platform #sysinfo
 import subprocess #wifi
 import shutil #filefinder
@@ -8,6 +8,7 @@ import platform
 import threading
 import os #jebbyscript
 import sys #private file ref
+import ctypes #wallpaper
 
 
 #configs
@@ -304,34 +305,44 @@ def ChangeBackground():
     bgPathEntry = Entry(window_frame)
     bgPathEntry.pack(side=tk.TOP, padx=30, fill=tk.X, ipady=5)
 
-    errorExtensionLabel = Label(window_frame, text="Error: Extension is NOT .gif")
+    errorExtensionLabel = Label(window_frame, text="Error: Extension is NOT a Supported Format")
     errorExtensionLabel.forget()
 
-    chgBgDoingLabel = Label(window_frame, text="path is okay")
+    chgBgDoingLabel = Label(window_frame, text="Successfully changed Desktop Background!")
     chgBgDoingLabel.forget()
 
     errorPathLabel = Label(window_frame, text="Error: Path Not Found")
     errorPathLabel.forget()
 
-    def confirmBgPath():
-        #IsolatedFile = os.path.basename(finalDestpath) 
+    def confirmBgPath(): 
         pathExtension = os.path.splitext(os.path.basename(bgPathEntry.get()))[1]
-        if pathExtension != ".gif" and not os.path.exists(bgPathEntry.get()):
-            chgBgDoingLabel.forget()
-            errorExtensionLabel.pack()
-            errorPathLabel.pack()
-        elif pathExtension != ".gif":
-            errorPathLabel.forget()
-            chgBgDoingLabel.forget()
-            errorExtensionLabel.pack()
+        extensionRequirementsNotMet = (
+            pathExtension != ".png" and pathExtension != ".tif" and pathExtension != ".jpg" and pathExtension != ".jpeg" 
+            and pathExtension != ".bmp" and pathExtension != ".gif" and pathExtension != ".tiff" )
+        
+        if extensionRequirementsNotMet and not os.path.exists(bgPathEntry.get()):
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.pack() #"Error: Extension is NOT a Supported Format" - Show
+            errorPathLabel.pack() #"Error: Path Not Found" - Show
+
+        elif extensionRequirementsNotMet:
+            errorPathLabel.forget() #"Error: Path Not Found"
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.pack() #"Error: Extension is NOT a Supported Format" - Show
+
         elif not os.path.exists(bgPathEntry.get()):
-            chgBgDoingLabel.forget()
-            errorExtensionLabel.forget()
-            errorPathLabel.pack()
-        else:
-            errorExtensionLabel.forget()
-            errorPathLabel.forget()
-            chgBgDoingLabel.pack()
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.forget() #"Error: Extension is NOT a Supported Format"
+            errorPathLabel.pack() #"Error: Path Not Found" - Show
+
+        else: #success
+            errorExtensionLabel.forget() #"Error: Extension is NOT a Supported Format"
+            errorPathLabel.forget() #"Error: Path Not Found"
+            
+            WALLPAPER_PATH = bgPathEntry.get()
+            ctypes.windll.user32.SystemParametersInfoW(20, 0, WALLPAPER_PATH, 3)
+
+            chgBgDoingLabel.pack() #"path is okay" - Show
         
 
     setBgButton = Button(window_frame, text="Set as background!", command=confirmBgPath)
