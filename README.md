@@ -13,12 +13,12 @@
 
 ## How to run:
 ### **Stable Release:**
-- [1] Download & extract the `Jebby's Jailbreak.zip` file from the provided link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v7)
+- [1] Download & extract the `Jebbys_Jailbreak_Stable.zip` file from the provided link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v8)
 - [2] Run the `Jebby's Jailbreak.pyw` file inside.
 
 *OR*
 
-- [1] Download & extract the `Jebby.s.Jailbreak.zip` file from the provided asset link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v7)
+- [1] Download & extract the `Jebbys_Jailbreak_Stable.zip` file from the provided asset link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v8)
 - [2] Run the `Jebby's Jailbreak.pyw` file inside.
 
 =======================================
@@ -35,6 +35,7 @@
 - **Get the path of window's executables**
 - **"Jebby's method" on running & retrieving blocked executables (other file types *may* be supported)**
 => Executables and/or other file types which require admin permissions may not run as intended, as for now... perhaps.
+- **Change the desktop background**
 
 ---
 
