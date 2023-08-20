@@ -6,7 +6,7 @@
 ---
 
 ### REQUIREMENTS:
-- [OS] - { Windows >= 10 }
+- [Recommended OS] - { Windows >= 10 }
 - [Software] - { Python >= Version 2.4 } (Untested Claim)
 
 ---
@@ -36,6 +36,14 @@
 - **"Jebby's method" on running & retrieving blocked executables (other file types *may* be supported)**
 => Executables and/or other file types which require admin permissions may not run as intended, as for now... perhaps.
 - **Change the desktop background**
+
+---
+
+## Tested Environments:
+- Raspberry OS        > Broken
+- Windows 11 Sandbox  > Working
+- Windows 11          > Working
+- Linux OS'           > Broken
 
 ---
 
