@@ -40,10 +40,13 @@
 ---
 
 ## Tested Environments:
-- Raspberry OS        > Broken
-- Windows 11 Sandbox  > Working
-- Windows 11          > Working
-- Linux OS'           > Broken
+
+| OS:                  | STATUS: |
+| -------------------- |---------|
+| Raspberry Pi         | Broken  |
+| Linux                | Broken  |
+| (Sandbox) Windows 11 | Working | 
+| Windows 11           | Working |
 
 ---
 
