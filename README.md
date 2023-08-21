@@ -21,7 +21,7 @@
 - [1] Download & extract the `Jebbys_Jailbreak_Stable.zip` file from the provided asset link in the [latest release](https://github.com/JebbyCodes/Jebbys-Jailbreak/releases/tag/v8)
 - [2] Run the `Jebby's Jailbreak.pyw` file inside.
 
-<hr style="border:0.5px solid gray">
+<hr style="border:0.5px solid orange">
 
 ### **Experimental Release:**
 - [1] - Download the `Jebby's Jailbreak` folder.
