@@ -1,4 +1,4 @@
-# // Jebbys-Jailbreak \\\
+# / Jebbys-Jailbreak \\
 **A set of tools used to circumvent Impero, fully coded in Python.**
 
 *This is a compilation of an increasing set of tools used to circumvent Impero's restrictions on computers.*
