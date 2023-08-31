@@ -47,6 +47,17 @@
 | Linux                | Broken  |
 | (Sandbox) Windows 11 | Working | 
 | Windows 11           | Working |
+| Windows 10           | Working |
+| (Hyper-V) Windows 10 | Broken  |
+
+---
+
+## Limitations:
+
+- `Fetch WiFi Password` => Won't work with ethernet cable connections
+- `Fetch WiFi Password` => Doesn't work in linux os
+-
+- `Linux  OS`  => UI misalignment issues will occur
 
 ---
 
