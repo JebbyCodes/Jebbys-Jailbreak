@@ -1,715 +1,682 @@
-
-import platform
-import subprocess
-import shutil, win32api ,win32con
+## 22/7/23 V8 - Experimental    [https://github.com/JebbyCodes/Jebbys-Jailbreak]
+import platform #sysinfo
+import subprocess #wifi
+import shutil #filefinder
+from tkinter import *
 import tkinter as tk
 import threading
-import os
-import sys
-import ctypes
-from tkinter import *
-from tkinter.ttk import Style, Frame as fp
-from tkinter import scrolledtext, ttk, filedialog
+import os #jebbyscript
+import sys #private file ref
+import ctypes #wallpaper
 
+#############################################################################################################
+###########[ CONFIGS ]###############[ CONFIGS ]############[ CONFIGS ]###########[ CONFIGS ]###############
 
-background="black"
-text="white"
-light="#474747"
-dark="#212121"
-font="cambria"
-border=0
-
+font = "Segoe UI"
+boldFont = "Arial", "bold"
+background = '#222027'
 icon = os.path.join(sys.path[0], "Icon.ico")
 iconAlt = os.path.join(sys.path[0], "IconAlt.ico")
 iconTest = os.path.join(sys.path[0], "IconTest.ico")
+filler = "\n*******************************\n"
+exitKey = "<Alt_R>" #Alt Gr
+window_width = 275
+window_height = 325
+ResizeX = False
+ResizeY = False
 
-root = Tk()
-root['bg']=background
+"""
+# buttonComConfig(exampleButton) Calls Func, not bold, edits given button
+                                Fulfills all args
+# buttonComConfig(exampleButton, True) Now bold
 
-def toggle(event):
-    if event.type == EventType.Map:
-        root.deiconify()
-        root.lift()
-    else:
-         root.withdraw()
+# def buttonComConfig(button=None, requestBold=False): | create Func, with 2 args, 1st
+                ||requestBold is False by default||     is custom keyword, 2nd is
+                                                        object "button" (tkinter)
+"""
+def buttonConfig(button=None, requestBold=False, FontSize=None, Font=None, isText=False, w=None, h=None): #func allows button widgets
+    if button: #if button request fulfilled
 
-top = Toplevel(root)
-top.geometry('0x0+10000+10000') 
-top.protocol('WM_DELETE_WINDOW', root.destroy)
-top.bind("<Map>", toggle)
-top.bind("<Unmap>", toggle)
-top.title("Jebby's Jailbreak")
-top.iconbitmap(iconTest)
+        if FontSize is None:
+            FontSize = 9
+        if Font is None:
+            Font = font
+        
+        if w is None:
+            w = 15
+        if h is None:
+            h = 2
+            
+        if requestBold: #if "requestBold" is True
+            button.config(font=(boldFont, FontSize), fg = "white", bg = "RoyalBlue4", width = w, height = h)
+        else:
+            button.config(font=(Font, FontSize), fg = "white", bg = "RoyalBlue4", width = w, height = h)
 
-width=int(root.winfo_screenwidth()/1.5)
-height=int(root.winfo_screenheight()/1.5)
-root.geometry(f"{width}x{height}")
-root.overrideredirect(True)
-root.title("Jebby's Jailbreak")
- 
-buttonframe=Frame(root)
+        if isText:
+            button.config(bg=background, fg="white", font=(Font, 9)) #fix, must use variable
 
-buttonframe.columnconfigure(0, weight=1)
-buttonframe.columnconfigure(1, weight=1)
-buttonframe.columnconfigure(2, weight=1)
-buttonframe.columnconfigure(3, weight=1)
-buttonframe.columnconfigure(4, weight=1)
+#############################################################################################################
+########[ NOTES ]##########[ NOTES ]############[ NOTES ]#########[ NOTES ]#########[ NOTES ]#######[ NOTES ]
 
-def on_mouse_press(evt):
-    global xp, yp
-    xp = evt.x
-    yp = evt.y
+#sys.path[0] = parent dir
+#you may choose to not use the icons
+#press enter instead of pressing the button in entry prompts
+#arrow keys supported to change page
+#event=None, accept event AND other stuff
 
-def on_mouse_drag(evt):
-    deltax = evt.x - xp
-    deltay = evt.y - yp
-    x = root.winfo_x() + deltax
-    y = root.winfo_y() + deltay
-    root.geometry(f"+{x}+{y}")
+#############################################################################################################
+########[ WINDOW ]##########[ WINDOW ]############[ WINDOW ]#########[ WINDOW ]#########[ WINDOW ]###########
 
-def quitpy():
-    root.destroy()
+window = Tk()
+window.title("Jebby's Jailbreak")
+window.iconbitmap(iconTest)
+window.resizable(ResizeX, ResizeY)
 
-def notfullscreen():
-    width=int(root.winfo_screenwidth()/1.5)
-    height=int(root.winfo_screenheight()/1.5)
-    output2.configure(height = 1000, width = int(width/13.15))
-    mycanva.configure(width=int(width/1.46), height=int(width))
-    root.overrideredirect(True) 
-    root.attributes('-fullscreen', False)
-    button2.config(width=3, height=0, text=" □ ", borderwidth=border, command=fullscreen)
+#############################################################################################################
+########[ EMERGENCY EXIT ]##########[ EMERGENCY EXIT ]##########[ EMERGENCY EXIT ]#########[ EMERGENCY EXIT ]
 
-def fullscreen():
-    width=int(root.winfo_screenwidth())
-    height=int(root.winfo_screenheight())
-    output2.configure(height = 1000, width = int(width/11.4))
-    mycanva.configure(width=int(width/1.265), height=int(width)) 
-    root.overrideredirect(False)
-    root.attributes('-fullscreen', True)
-    button2.config(width=3, height=0, text=" 🗗 ", borderwidth=border, command=notfullscreen)
+def emergency_exit(event): #must make function accept "events", like .bind
+    window.quit()
 
- 
-buttonframe.bind('<B1-Motion>', on_mouse_drag)
-buttonframe.bind('<ButtonPress-1>', on_mouse_press)
+window.bind(exitKey, emergency_exit)
 
-buttonframe.pack(padx=0, pady=0, fill="x")
-buttonframe.config(width=3, height=0, bg = dark, borderwidth=0)
+#############################################################################################################
+##########[ CLEAR PAGE 1 ]############[ CLEAR PAGE 1 ]############[ CLEAR PAGE 1 ]###########[ CLEAR PAGE 1 ]
 
-button1=Button(buttonframe, text=" × ", font=("arial", 13))
-button1.config(width=3, height=0, fg = text, bg = dark, activebackground="red", activeforeground=text, borderwidth=border, command=quitpy)
-button1.grid(row=0, column=7)
+def clearMainhomeScreen():
+    fetchWifibutton.forget()
+    fetchInfobutton.forget()
+    fetchExebutton.forget()
+    jebbyScriptbutton.forget()
+    canvasMain.pack_forget()
+    canvas2.pack_forget()
+    nextPagelabel.place_forget()
+    forwardPagebutton.place_forget()
+    backPagebutton.place_forget()
+    miscButton.place_forget()
+    window.unbind("<Right>")
+    window.unbind("<Left>")
 
-button2=Button(buttonframe, text=" □ ", font=("arial", 13))
-button2.config(width=3, height=0, fg = text, bg = dark, activebackground=light, activeforeground=text, borderwidth=border, command=fullscreen)
-button2.grid(row=0, column=6)
+#############################################################################################################
+#########[ CENTRE WINDOW ]###########[ CENTRE WINDOW ]###########[ CENTRE WINDOW ]##########[ CENTRE WINDOW ]
 
-button3=Button(buttonframe, text=" - ", font=("arial", 13))
-button3.config(width=3, height=0, fg = text, bg = dark, activebackground=light, activeforeground=text, borderwidth=border, command=top.iconify)
-button3.grid(row=0, column=5)
+def center_window(window, width, height):
+    # Get the screen width and height
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
 
-text=Label(root, text="Jebby's Jailbreak", font=(font, 12 ,"bold"), fg = light, bg = dark)
-text.place(x=10,y=2)
+    # Calculate the x and y coordinates for the window to be centered
+    x = (screen_width - width) // 2
+    y = (screen_height - height) // 2
 
+    # Set the window geometry to center it on the screen
+    window.geometry(f"{width}x{height}+{x}+{y}")
 
+center_window(window, window_width, window_height)
 
+#############################################################################################################
+#########[ WINDOW_FRAME ]###########[ WINDOW_FRAME ]###########[ WINDOW_FRAME ]##########[ WINDOW_FRAME ]####
 
+window_frame = tk.Frame(window)
+window_frame.pack(fill=tk.BOTH, expand=True)
+window_frame['bg']=background
 
-wrapper=LabelFrame(root)
-wrapper['bg']='black'
-wrapper.configure(borderwidth=0)
+#############################################################################################################
+#########[ CLEAR WINDOW_FRAME ]###########[ CLEAR WINDOW_FRAME ]###########[ CLEAR WINDOW_FRAME ]############
 
-style = ttk.Style()
-style.theme_use('clam')
+def forget_all_widgets(window_frame):
+    for widget in window_frame.winfo_children():
+        widget.pack_forget()
 
-style.configure("Vertical.TScrollbar", gripcount=0, background="#474747", darkcolor="#212121", lightcolor="#212121", troughcolor="#212121", bordercolor="#212121", arrowcolor="white")
-
-mycanvas=Canvas(wrapper, width=int(width/3.35),height=200, bg="white")
-mycanvas.pack(side=RIGHT, fill="both", expand="no")
-
-yscrollbar=ttk.Scrollbar(wrapper, orient="vertical", command=mycanvas.yview)
-yscrollbar.pack(side=RIGHT, fill="y")
-
-mycanvas.configure(yscrollcommand=yscrollbar.set)
-mycanvas['bg']='black'
-mycanvas.bind("<Configure>", lambda e: mycanvas.configure(scrollregion= mycanvas.bbox("all")))
-mycanvas.configure(borderwidth=0, highlightthickness=0)
-
-myframe=Frame(mycanvas)
-myframe['bg']='black'
-myframe.configure(borderwidth=0)
-mycanvas.create_window((0,0), window=myframe, anchor="ne")
-
-wrapper.pack(fill="both", expand="yes")
-
-
-
-title1=Label(myframe, text="System Information:", font=("cambria 28 bold"), bg="black", fg="#474747")
-title1.pack(padx=0,pady=10)
+#############################################################################################################
+######[ START OF JAILBREAKS ]###############[ START OF JAILBREAKS ]#####################[ START OF JAILBREAKS ]#####################
 
 def fetchInfopressed():
-    output2.delete("1.0", "end")
-    
-    output2.insert("1.0", f"\nPlatform processor:", "bold") 
-    output2.insert("end", f"\n  {platform.processor()}\n", "normal")
+    clearMainhomeScreen()
 
-    output2.insert("end", "\nSystem platform:", "bold")
-    output2.insert("end", f"\n    {platform.system()}\n", "normal")
+    homeButton.place(x=233, y=300) #right
+    homeButton.config(command=homePressed)
 
-    output2.insert("end", "\nNode name (hostname):", "bold")
-    output2.insert("end", f"\n    {platform.node()}\n", "normal")
+ 
+    sysInfo = Text(window_frame, wrap=tk.WORD)
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.tag_configure("bold", font=(font, 9, "bold")) #this is what "bold" text will look like
+    sysInfo.tag_configure("normal", font=(font, 9)) #this is what "normal" text will look like
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("1.0", "Platform processor:", "bold") # Platform Processor
+    sysInfo.insert("end", f"\n {platform.processor()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nSystem platform:", "bold") # System platform
+    sysInfo.insert("end", f"\n {platform.system()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nNode name (hostname):", "bold") # Node name (hostname)
+    sysInfo.insert("end", f"\n {platform.node()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nSystem release:", "bold") # Release version
+    sysInfo.insert("end", f"\n {platform.system()} {platform.release()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nProcessor architecture:", "bold") # Processor architecture
+    sysInfo.insert("end", f"\n {platform.machine()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nPlatform processor:", "bold") # System OS
+    sysInfo.insert("end", f"\n {platform.platform()}\n", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    sysInfo.insert("end", "\nPlatform architecture:", "bold") # Platform architecture
+    sysInfo.insert("end", f"\n {platform.architecture()}", "normal")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    output2.insert("end", "\nSystem release:", "bold")
-    output2.insert("end", f"\n    {platform.system()} {platform.release()}\n", "normal")
+    sysInfo.configure(bg=background, fg="white")
+    sysInfo.pack()    
 
-    output2.insert("end", "\nProcessor architecture:", "bold")
-    output2.insert("end", f"\n    {platform.machine()}\n", "normal")
-
-    output2.insert("end", "\nPlatform processor:", "bold")
-    output2.insert("end", f"\n    {platform.platform()}\n", "normal")
-
-    output2.insert("end", "\nPlatform architecture:", "bold") 
-    output2.insert("end", f"\n    {platform.architecture()}", "normal")
-
-fetchInfobutton=Button(myframe, text="Fetch Sys Info", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=fetchInfopressed, width=20)
-fetchInfobutton.pack(padx=int(width/100), pady=20)
+####################################################################################################################################
+##########[ JAILBREAKS - GET WIFI ]###############[ JAILBREAKS  - GET WIFI ]#####################[ JAILBREAKS  - GET WIFI ]#########
 
 def fetch_wifi_thread():
     def fetch_wifi():
+        homeButton.place(x=0, y=300)
+        homeButton.config(command=homePressed)
+
         fetchWifibutton.config(state=tk.DISABLED)
         fetchInfobutton.config(state=tk.DISABLED)
         fetchExebutton.config(state=tk.DISABLED)
-        jebbybutton.config(state=tk.DISABLED)
-        fetchExebutton1.config(state=tk.DISABLED)
-        fetchExebutton2.config(state=tk.DISABLED)
-        fetchExebutton3.config(state=tk.DISABLED)
-        lightbutton.config(state=tk.DISABLED)
-        bluebutton.config(state=tk.DISABLED)
-        darkbutton.config(state=tk.DISABLED)
-        creditsbutton.config(state=tk.DISABLED)
-        wallpaperbutton.config(state=tk.DISABLED)
+        jebbyScriptbutton.config(state=tk.DISABLED)
+        nextPagelabel.config(state=tk.DISABLED)
+        forwardPagebutton.config(state=tk.DISABLED)
+        backPagebutton.config(state=tk.DISABLED)
+        clearMainhomeScreen()
+
         
-        
+
+        wifiResultsframe = tk.Frame(window_frame, bg="RoyalBlue4")
+        wifiResultsframe.pack(side=tk.BOTTOM,fill=tk.BOTH, expand=True)
+        wifiResultsframe.pack_propagate(False)
+
+        wifiUserindicateLabel = Label(window_frame, text="USERNAME:")
+        wifiUserindicateLabel.config(bg=background, fg="white")
+        wifiUserindicateLabel.pack(side=tk.LEFT, padx=5, pady=5)
+
+        wifiPassindicateLabel = Label(window_frame, text="PASSWORD:")
+        wifiPassindicateLabel.config(bg=background, fg="white")
+        wifiPassindicateLabel.pack(side=tk.RIGHT, padx=5, pady=5)
+
         a = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
         a = [i.split(":")[1][1:-1] for i in a if "All User Profile" in i]
-        output2.delete("1.0", "end")
-        output2.insert(tk.END, f"\nUSERNAME    | PASSWORD\n \n", "bold")
         for i in a:
             try:
                 results = subprocess.check_output(['netsh', 'wlan', 'show', 'profile', i, 'key=clear']).decode('utf-8', errors="ignore").split('\n')
                 results = [b.split(":")[1][1:-1] for b in results if "Key Content" in b]
                 try:
-                    output2.insert(tk.END, "\n{:<15}| {:<}\n".format(i, results[0]))
+                    WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
+                    WifiUsertext.insert(tk.END, "{:<15}| {:<}".format(i, results[0]))
+                    WifiUsertext.pack(pady=7)
+                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
                 except IndexError:
-                    output2.insert(tk.END, "\n{:<15}|  {:<}\n".format(i, ""))
+                    WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
+                    WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, ""))
+                    WifiUsertext.pack(pady=7)
+                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
             except subprocess.CalledProcessError:
-                output2.insert(tk.END, "\n{:<15}|  {:<}\n".format(i, "ENCODING ERROR"))
+                WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
+                WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, "ENCODING ERROR"))
+                WifiUsertext.pack(pady=7)
+                WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
         
-        fetchWifibutton.config(state=tk.NORMAL)   
+        fetchWifibutton.config(state=tk.NORMAL)  # Enable the button after fetching
         fetchInfobutton.config(state=tk.NORMAL)
         fetchExebutton.config(state=tk.NORMAL)
-        jebbybutton.config(state=tk.NORMAL)
-        fetchExebutton1.config(state=tk.NORMAL)
-        fetchExebutton2.config(state=tk.NORMAL)
-        fetchExebutton3.config(state=tk.NORMAL)
-        lightbutton.config(state=tk.NORMAL)
-        bluebutton.config(state=tk.NORMAL)
-        darkbutton.config(state=tk.NORMAL)
-        creditsbutton.config(state=tk.NORMAL)
-        wallpaperbutton.config(state=tk.NORMAL)
-            
+        jebbyScriptbutton.config(state=tk.NORMAL)
+        nextPagelabel.config(state=tk.NORMAL)
+        forwardPagebutton.config(state=tk.NORMAL)
+        backPagebutton.config(state=tk.NORMAL)
+
     thread = threading.Thread(target=fetch_wifi)
     thread.start()
 
-fetchWifibutton=Button(myframe, text="Fetch Wifi Passwords *", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=fetch_wifi_thread, width=20)
-fetchWifibutton.pack()
-
-warning=Label(myframe, text="* use at own risk", font=("arial 20"), bg="black", fg="#212121")
-warning.pack()
+####################################################################################################################################
+######[ JAILBREAKS - GET EXE PATH ]###############[ JAILBREAKS - GET EXE PATH ]##################[ JAILBREAKS  - GET EXE PATH ]#####
 
 def fetchExe():
-    insertPath = entry.get()
-    path = shutil.which(insertPath)
+    homeButton.place(x=0, y=300)
+    homeButton.config(command=homePressed)
 
-    if path is None:
-        output2.delete("1.0", "end")
-        output2.insert(tk.END, "\nERROR: No Path Found\n")
-    else:
-        output2.delete("1.0", "end")
-        output2.insert(tk.END, f"\nPath to file: {path}\n" )
+    clearMainhomeScreen()
 
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.pack(pady=15)
+    invisiLabel.config(bg=background)
 
-o=Label(myframe, text="", font=("arial 10"), bg="black", fg="#212121")
-o.pack()
-
-fetchExebutton=Button(myframe, text="Fetch EXE Path", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=fetchExe, width=20)
-fetchExebutton.pack()
-
-button_border4 = tk.Frame(myframe, highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-button_border4.pack(padx=0,pady=10)
-
-entry=Entry(button_border4, font=("arial 20"), bg="black", fg="white", borderwidth=0)
-entry.pack()
+    exeEntry = Entry(window_frame)
+    exeEntry.pack(side=tk.TOP, padx=30, fill=tk.X)
 
 
-
-
-title2=Label(myframe, text="", font=("cambria 48 bold"), bg="black", fg="white")
-title2.pack(padx=0,pady=10)
-
-title3=Label(myframe, text="Jebby's Script:", font=("cambria 28 bold"), bg="black", fg="#474747")
-title3.pack()
-
-def jebButtonpressed():
-    src_path=entry2.get()
-    dst_path=entry3.get()
-    output2.delete("1.0", "end")
-    banSymbol = []
-    if any(symbol in dst_path for symbol in banSymbol):
-        output2.insert(tk.END, "\nERROR: Forbidden Symbols Used")
-
-    elif any(symbol in src_path for symbol in banSymbol):
-        output2.insert(tk.END, "\nERROR: Forbidden Symbols Used")
-        
-    else:
-        if not os.path.exists(dst_path) and not os.path.exists(src_path):
-            output2.insert(tk.END, f"\nError: Source File Path not found at '{src_path}'\n \nError: Destination Path not found at '{dst_path}'")
-            return
-
-        elif not os.path.exists(src_path):
-            output2.insert(tk.END, f"\nError: Source File Path not found at '{src_path}'")
-            return
-            
-        elif not os.path.exists(dst_path):
-            output2.insert(tk.END, f"\nError: Destination Path not found at '{dst_path}'")
-            return
-
-        finalDestpath = os.path.join(dst_path, os.path.basename(src_path)) #finalDestination/wee/poo/foo.abc
-
-        shutil.copy(src_path, finalDestpath) #oldDestination/what/when/foo.abc => finalDestination/wee/poo/foo.abc
-        IsolatedFile = os.path.basename(finalDestpath) #foo.abc
-
-        JustfileEx = os.path.splitext(IsolatedFile)[1] #.abc
-
-        NewFileName = "Chrome" + JustfileEx #Chrome.abc
-
-        #os.rename(get the original untouched final destination, renamed to the full directory of the original untouched final destination joined with the brand new file[Chrome.abc])
-        os.rename(finalDestpath, os.path.join(os.path.dirname(finalDestpath), NewFileName))
-
-        output2.insert(tk.END, "\nJailbroken Successfully!\n\nCheck output folder")
-
-def choosefile():
-    entry2.delete(0, END)
-
-    file = str(filedialog.askopenfilenames())
-
-    file = file.replace(",", "")
-    file = file.replace("'", "")
-    file = file.replace(")", "")
-    file = file.replace("(", "")
-
-    entry2.insert(tk.END, file)
+    def getExeentry(event=None): #accept "event" AND other stuff
     
+        insertPath = exeEntry.get()
+        path = shutil.which(insertPath) 
+
+        if path is None:
+            GotExePath.forget()
+            NoExePath.config(text="Error: No Path Found", bg='white')
+        else:
+            GotExePath.config(state=tk.NORMAL, highlightthickness=0)
+            GotExePath.delete("1.0", tk.END)
+            GotExePath.insert(tk.END, f"Path to file: {path}")
+            GotExePath.config(state=tk.DISABLED, highlightthickness=0)
+            GotExePath.pack()
+            NoExePath.config(text="", bg=background)
+
+    subExebutton = Button(window_frame, text="Fetch Path", command=getExeentry)
     
-def choosefile2():
-    entry3.delete(0, END)
-    
-    destination = str(filedialog.askopenfilenames())
+    subExebutton.config(fg = "white", bg = "RoyalBlue4")
+    subExebutton.pack()
 
-    destination = destination.replace(",", "")
-    destination = destination.replace("'", "")
-    destination = destination.replace(")", "")
-    destination = destination.replace("(", "")
+    NoExePath = Label(window_frame, text="", wraplength=200)
+    NoExePath.config(bg=background)
+    NoExePath.pack()
+    GotExePath = tk.Text(window_frame, wrap=tk.WORD, height=3, width=20)
+    GotExePath.insert(tk.END, "")
+    GotExePath.config(state=tk.DISABLED, highlightthickness=0)
 
-    entry3.insert(tk.END, destination)
+    window.bind("<Return>", getExeentry)
 
+####################################################################################################################################
+######[ JAILBREAKS - JEBBY'S SCRIPT ]###############[ JAILBREAKS - JEBBY'S SCRIPT ]##################[ JAILBREAKS - JEBBY'S SCRIPT ]
 
-jebbybutton=Button(myframe, text="Jailbreak!", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=jebButtonpressed, width=20)
-jebbybutton.pack(padx=int(width/100), pady=20)
+def jebbyScriptpressed():
+    homeButton.place(x=0, y=300)
+    homeButton.config(command=homePressed)
+    clearMainhomeScreen()
 
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.pack(pady=15)
+    invisiLabel.config(bg=background)
+    pathEntry = Entry(window_frame, width=30)
+    pathEntry.pack(ipady=6)
 
-button_border3 = tk.Frame(myframe, highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-button_border3.pack(padx=0,pady=10)
+    banSymbol = ['"', '|', '?', '/', '<', '>', '*']
 
-entry2=Entry(button_border3, font=("arial 20"), bg="black", fg="white", borderwidth=0)
-entry2.pack()
+    def jebButtonpressed(event=None):
+        if any(symbol in pathEntry.get() for symbol in banSymbol):
+            errorLabel = Label(window_frame,text="ERROR: Forbidden Symbols Used")
+            errorLabel.pack()
+        else:
+            pathEntry.forget()
+            jebbyButton.forget()
+            seldesLabel = Label(window_frame,text="Select destination:")
+            seldesLabel.pack()
+            destEntry = Entry(window_frame, width = 15)
+            destEntry.pack()
 
-fetchExebutton1=Button(myframe, text="Choose File", font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=choosefile, width=16)
-fetchExebutton1.pack()
+            errorLabelBoth = Label(window_frame, wraplength=200, bg=background)
+            errorLabelSrc = Label(window_frame, wraplength=200, bg=background)
+            errorLabelDst = Label(window_frame, wraplength=200, bg=background)
 
+            def destGopressed(event=None):
+                src_path = rf'{pathEntry.get()}'
+                dst_path = rf'{destEntry.get()}'
 
-title4=Label(myframe, text="", font=("cambria 1 bold"), bg="black", fg="white")
-title4.pack(padx=0,pady=10)
+                if not os.path.exists(dst_path) and not os.path.exists(src_path):
+                    errorLabelBoth.config(text=f"Error: Source File Path not found at '{src_path}'\n \nError: Destination Path not found at '{dst_path}'", bg="white")
+                    errorLabelBoth.pack()
+                    errorLabelSrc.forget()
+                    errorLabelDst.forget()
+                    return
 
+                elif not os.path.exists(src_path):
+                    errorLabelSrc.config(text=f"Error: Source File Path not found at '{src_path}'", bg="white")
+                    errorLabelSrc.pack()
+                    errorLabelDst.forget()
+                    errorLabelBoth.forget()
+                    return
+                    
+                elif not os.path.exists(dst_path):
+                    errorLabelDst.config(text=f"Error: Destination Path not found at '{dst_path}'", bg="white")
+                    errorLabelDst.pack()
+                    errorLabelBoth.forget()
+                    errorLabelSrc.forget()
+                    return
+                    
+                
+                
+                finalDestpath = os.path.join(dst_path, os.path.basename(src_path)) #finalDestination/wee/poo/foo.abc
 
-button_border2 = tk.Frame(myframe, highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-button_border2.pack(padx=0,pady=10)
+                shutil.copy(src_path, finalDestpath) #oldDestination/what/when/foo.abc => finalDestination/wee/poo/foo.abc
 
-entry3=Entry(button_border2, font=("arial 20"), bg="black", fg="white", borderwidth=0)
-entry3.pack()
+                IsolatedFile = os.path.basename(finalDestpath) #foo.abc
 
-fetchExebutton2=Button(myframe, text="Choose Destination", font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=choosefile2, width=16)
-fetchExebutton2.pack()
+                JustfileEx = os.path.splitext(IsolatedFile)[1] #.abc
 
-title5=Label(myframe, text="", font=("cambria 48 bold"), bg="black", fg="white")
-title5.pack(padx=0,pady=10)
+                NewFileName = "Chrome" + JustfileEx #Chrome.abc
 
+                #os.rename(get the original untouched final destination, renamed to the full directory of the original untouched final destination joined with the brand new file[Chrome.abc])
+                os.rename(finalDestpath, os.path.join(os.path.dirname(finalDestpath), NewFileName))
 
+                successLabel = Label(window_frame, text="Jailbroken Successfully!")
+                successLabel.pack()
+                
 
+            destGobutton = Button(window_frame, text="Confirm", command=destGopressed)
+            buttonConfig(destGobutton)
+            destGobutton.pack()
+            window.bind("<Return>", destGopressed)
 
-title=Label(myframe, text="Cosmetic Features:", font=("cambria 28 bold"), bg="black", fg="#474747")
-title.pack(padx=0,pady=10)
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.pack(pady=1)
+    invisiLabel.config(bg=background)
+    jebbyButton = Button(window_frame, text="Jailbreak!", command=jebButtonpressed)
+    buttonConfig(jebbyButton)
+    jebbyButton.config(width=15, height=2)
+    jebbyButton.pack()
 
-def wallpaper():
-        pathExtension = os.path.splitext(os.path.basename(entry4.get()))[1]
+    window.bind("<Return>", jebButtonpressed)
+
+#######################[ END OF JAILBREAKS - PAGE 1 ]#######################[ END OF JAILBREAKS - PAGE 1 ]##########################
+####################################################################################################################################
+
+####################################################################################################################################
+######[ JAILBREAKS - BACKGROUND ]###############[ JAILBREAKS - BACKGROUND ]#####################[ JAILBREAKS - BACKGROUND ]##########
+
+def ChangeBackground():
+    forget_all_widgets(window_frame)
+    nextPagelabel.place_forget()
+    backPagebutton.place_forget()
+    homeButton.place(x=0, y=300)
+    homeButton.config(command=Page2Pressed)
+    window.unbind("<Right>")
+    window.unbind("<Left>")
+    miscButton.place_forget()
+
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.config(bg=background)
+    invisiLabel.pack(pady=5)
+
+    bgPathEntry = Entry(window_frame)
+    bgPathEntry.pack(side=tk.TOP, padx=30, fill=tk.X, ipady=5)
+
+    errorExtensionLabel = Label(window_frame, text="Error: Extension is NOT a Supported Format")
+    errorExtensionLabel.forget()
+
+    chgBgDoingLabel = Label(window_frame, text="Successfully changed Desktop Background!")
+    chgBgDoingLabel.forget()
+
+    errorPathLabel = Label(window_frame, text="Error: Path Not Found")
+    errorPathLabel.forget()
+
+    def confirmBgPath(event=None): 
+        pathExtension = os.path.splitext(os.path.basename(bgPathEntry.get()))[1]
         extensionRequirementsNotMet = (
-            pathExtension != ".PNG" and pathExtension != ".tif" and pathExtension != ".jpg" and pathExtension != ".jpeg" 
+            pathExtension != ".png" and pathExtension != ".tif" and pathExtension != ".jpg" and pathExtension != ".jpeg" 
             and pathExtension != ".bmp" and pathExtension != ".gif" and pathExtension != ".tiff" )
         
-        if extensionRequirementsNotMet and not os.path.exists(entry4.get()):
-            output2.delete(1.0, tk.END) #"Error: Extension is NOT a Supported Format" - Show
-            output2.insert(tk.END, "\nError: Extension is NOT a Supported Format\n")
+        if extensionRequirementsNotMet and not os.path.exists(bgPathEntry.get()):
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.pack() #"Error: Extension is NOT a Supported Format" - Show
+            errorPathLabel.pack() #"Error: Path Not Found" - Show
 
         elif extensionRequirementsNotMet:
-            output2.delete(1.0, tk.END) #"Error: Extension is NOT a Supported Format" - Show
-            output2.insert(tk.END, "\nError: Extension is NOT a Supported Format\n")
+            errorPathLabel.forget() #"Error: Path Not Found"
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.pack() #"Error: Extension is NOT a Supported Format" - Show
 
-        elif not os.path.exists(entry4.get()):
-            output2.delete(1.0, tk.END) #"Error: Extension is NOT a Supported Format" - Show
-            output2.insert(tk.END, "\nError: Extension is NOT a Supported Format\n")
+        elif not os.path.exists(bgPathEntry.get()):
+            chgBgDoingLabel.forget() #"path is okay"
+            errorExtensionLabel.forget() #"Error: Extension is NOT a Supported Format"
+            errorPathLabel.pack() #"Error: Path Not Found" - Show
 
-        else:            
-            WALLPAPER_PATH = entry4.get()
+        else: #success
+            errorExtensionLabel.forget() #"Error: Extension is NOT a Supported Format"
+            errorPathLabel.forget() #"Error: Path Not Found"
+            
+            WALLPAPER_PATH = bgPathEntry.get()
             ctypes.windll.user32.SystemParametersInfoW(20, 0, WALLPAPER_PATH, 3)
 
-            output2.delete(1.0, tk.END) #"Error: Extension is NOT a Supported Format" - Show
-            output2.insert(tk.END, "\nWallpaper Successfully changed\n")
+            chgBgDoingLabel.pack() #"path is okay" - Show
+        
 
-wallpaperbutton=Button(myframe, text="Change Wallpaper", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=wallpaper, width=20)
-wallpaperbutton.pack(padx=int(width/100), pady=20)
+    setBgButton = Button(window_frame, text="Set as background!", command=confirmBgPath)
+    setBgButton.config(width=15, height=2)
+    buttonConfig(setBgButton)
+    setBgButton.pack()
+    window.bind("<Return>", confirmBgPath)
 
-button_border = tk.Frame(myframe, highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-button_border.pack(padx=0,pady=10)
+#######################[ END OF JAILBREAKS - PAGE 2 ]#######################[ END OF JAILBREAKS - PAGE 2 ]##########################
+####################################################################################################################################
 
-def wallpaperfile():
-    entry4.delete(0, END)
+####################################################################################################################################
+######[ CREDITS CODE ]##############[ CREDITS CODE ]################[ CREDITS CODE ]###############[ CREDITS CODE ]#################
 
-    file = str(filedialog.askopenfilenames())
+def Credits():
+    forget_all_widgets(window_frame)
+    nextPagelabel.place_forget()
+    backPagebutton.place_forget()
+    homeButton.place(x=0, y=300)
+    homeButton.config(command=Page2Pressed)
+    window.unbind("<Right>")
+    window.unbind("<Left>")
+    miscButton.place_forget()
 
-    file = file.replace(",", "")
-    file = file.replace("'", "")
-    file = file.replace(")", "")
-    file = file.replace("(", "")
-
-    entry4.insert(tk.END, file)
-
-entry4=Entry(button_border, font=("arial 20"), bg="black", fg="white", borderwidth=0)
-entry4.pack()
-
-fetchExebutton3=Button(myframe, text="Choose Image", font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=wallpaperfile, width=16)
-fetchExebutton3.pack()
-
-title6=Label(myframe, text="", font=("cambria 12 bold"), bg="black", fg="white")
-title6.pack()
-
-#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-mycanva=Canvas(wrapper, width=int(width/1.46),height=200, bg="black")
-mycanva.pack(side=RIGHT, fill="both", expand="no")
-
-yscrollbar2=ttk.Scrollbar(wrapper, orient="vertical", command=mycanva.yview)
-yscrollbar2.pack(side=RIGHT, fill="y")
-
-mycanva.configure(yscrollcommand=yscrollbar2.set)
-mycanva['bg']='black'
-mycanva.bind("<Configure>", lambda e: mycanva.configure(scrollregion= mycanva.bbox("all")))
-
-if root.winfo_screenheight()==1080:
-    mycanva.configure(borderwidth=-3, highlightthickness=0)
-
-else:
-    mycanva.configure(borderwidth=0, highlightthickness=0)
-
-myframe2=Frame(mycanva)
-myframe2['bg']='black'
-myframe2.configure(borderwidth=0)
-mycanva.create_window((0,0), window=myframe2, anchor="ne")
-
-wrapper.pack(fill="both", expand="yes")
-
-output2=Text(myframe2, height = 1000, width = int(width/13.15), borderwidth=0, fg = "white", bg = "black", font='arial 13', highlightthickness=0, wrap='word')
-output2.pack()
-
-
-
-def dark():
-    title8.config(bg="black", fg="white")
-    creditsbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    title7.config(bg="black", fg="white")
-    output2.config(borderwidth=0, fg = "white", bg = "black", font='arial 13')
-    myframe2['bg']='black'
-    myframe['bg']='black'
-    wrapper['bg']='black'
-    root['bg']='black'
-    mycanva['bg']='black'
-    mycanvas['bg']='black'
-    text.config(fg="#474747", bg="#212121")
-    style.configure("Vertical.TScrollbar", gripcount=0, background="#474747", darkcolor="#212121", lightcolor="#212121", troughcolor="#212121", bordercolor="#212121", arrowcolor="white")
-    buttonframe.config(bg = "#212121")
-    button1.config(fg = "white", bg = "#212121", activebackground="red", activeforeground="white", borderwidth=0)
-    button2.config(fg = "white", bg = "#212121", activebackground="#474747", activeforeground="white", borderwidth=0)
-    button3.config(fg = "white", bg = "#212121", activebackground="#474747", activeforeground="white", borderwidth=0)
-    title6.config(bg="black", fg="white")
-    title5.config(bg="black", fg="#474747")
-    title4.config(bg="black", fg="#474747")
-    title3.config(bg="black", fg="#474747", font=("cambria 28 bold"))
-    title2.config(bg="black", fg="#474747")
-    title.config(bg="black", fg="#474747", font=("cambria 28 bold"))
-    title1.config(bg="black", fg="#474747", font=("cambria 28 bold"))
-    o.config(bg="black", fg="#474747")
-    warning.config(bg="black", fg="#474747")
-    fetchExebutton3.config(font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    fetchExebutton2.config(font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    fetchExebutton1.config(font=("arial 15"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    entry.config(font=("arial 20"), bg="black", fg="white", borderwidth=0)
-    entry2.config(font=("arial 20"), bg="black", fg="white", borderwidth=0)
-    entry3.config(font=("arial 20"), bg="black", fg="white", borderwidth=0)
-    entry4.config(font=("arial 20"), bg="black", fg="white", borderwidth=0)
-    button_border.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-    button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-    button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-    button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-    fetchWifibutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)   
-    fetchInfobutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    fetchExebutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    jebbybutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    wallpaperbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    wrapper.config(borderwidth=0)
-    root.config(borderwidth=0)
-    lightbutton.config(bg="white", activebackground="gainsboro")
-    if root.winfo_screenheight()==1080:
-        mycanva.configure(borderwidth=-3, highlightthickness=0)
-
-    else:
-        mycanva.configure(borderwidth=0, highlightthickness=0)
-    canvasMain.pack_forget()
-    darkbutton.config(bg="#212121", activebackground="#474747")
-
-darkbutton=Button(myframe, text="Dark Theme", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=dark, width=20)
-darkbutton.pack(padx=int(width/100), pady=20)
-
-def light():
-    title8.config(bg="white", fg="#999999")
-    creditsbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    title7.config(bg="white", fg="#999999")
-    output2.config(borderwidth=0, fg = "black", bg = "white", font='arial 13')
-    myframe2['bg']='white'
-    myframe['bg']='white'
-    wrapper['bg']='white'
-    root['bg']='white'
-    mycanva['bg']='white'
-    mycanvas['bg']='white'
-    wrapper.config(borderwidth=1)
-    style.configure("Vertical.TScrollbar", gripcount=0, background="white", darkcolor="gainsboro", lightcolor="gainsboro", troughcolor="gainsboro", bordercolor="gainsboro", arrowcolor="black")
-    buttonframe.config(bg = "white")
-    text.config(fg="#999999", bg="white")
-    button1.config(fg = "black", bg = "white", activebackground="red", activeforeground="white", borderwidth=0)
-    button2.config(fg = "black", bg = "white", activebackground="gainsboro", activeforeground="white", borderwidth=0)
-    button3.config(fg = "black", bg = "white", activebackground="gainsboro", activeforeground="white", borderwidth=0)
-    title6.config(bg="white", fg="black")
-    root.config(borderwidth=1)
-    title5.config(bg="white", fg="#707070")
-    title4.config(bg="white", fg="#707070")
-    title3.config(bg="white", fg="#707070", font=("cambria 28 bold"))
-    title2.config(bg="white", fg="#707070")
-    title.config(bg="white", fg="#707070", font=("cambria 28 bold"))
-    title1.config(bg="white", fg="#707070", font=("cambria 28 bold"))
-    o.config(bg="white", fg="gainsboro")
-    warning.config(bg="white", fg="gainsboro")
-    fetchExebutton3.config(font=("arial 15"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    fetchExebutton2.config(font=("arial 15"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    fetchExebutton1.config(font=("arial 15"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    entry.config(font=("arial 20"), bg="white", fg="black", borderwidth=0)
-    entry2.config(font=("arial 20"), bg="white", fg="black", borderwidth=0)
-    entry3.config(font=("arial 20"), bg="white", fg="black", borderwidth=0)
-    entry4.config(font=("arial 20"), bg="white", fg="black", borderwidth=0)
-    button_border.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
-    button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
-    button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
-    button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
-    fetchWifibutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)   
-    fetchInfobutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    fetchExebutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    jebbybutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    wallpaperbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    canvasMain.pack_forget()
-    if root.winfo_screenheight()==1080:
-        mycanva.configure(borderwidth=-5)
-
-    else:
-        mycanva.configure(borderwidth=-1)
-    lightbutton.config(bg="gainsboro", activebackground="white")
-    darkbutton.config(bg="#212121", activebackground="#474747")
-
-lightbutton=Button(myframe, text="Light Theme", font=("cambria 24"), bg="white", fg="black", activebackground="gainsboro", activeforeground="black", borderwidth=0, command=light, width=20)
-lightbutton.pack(padx=int(width/100), pady=0)
-
-def blue():
-    title8.pack_forget()
-    creditsbutton.pack_forget()
-    title7.pack_forget()
-    title6.pack_forget()
-    title5.pack_forget()
-    title4.pack_forget()
-    title3.pack_forget()
-    title2.pack_forget()
-    title.pack_forget()
-    title1.pack_forget()
-    o.pack_forget()
-    warning.pack_forget()
-    fetchExebutton3.pack_forget()
-    fetchExebutton2.pack_forget()
-    fetchExebutton1.pack_forget()
-    entry.pack_forget()
-    entry2.pack_forget()
-    entry3.pack_forget()
-    entry4.pack_forget()
-    button_border.pack_forget()
-    button_border2.pack_forget()
-    button_border3.pack_forget()
-    button_border4.pack_forget()
-    fetchWifibutton.pack_forget()
-    fetchInfobutton.pack_forget()
-    fetchExebutton.pack_forget()
-    jebbybutton.pack_forget()
-    wallpaperbutton.pack_forget()
-    lightbutton.pack_forget()
-    bluebutton.pack_forget()
-    darkbutton.pack_forget()
-    canvasMain.pack(fill=tk.BOTH, expand=True)    
-    title1.pack(padx=0,pady=10)
-    fetchInfobutton.pack(padx=int(width/100), pady=20)
-    fetchWifibutton.pack()
-    warning.pack()
-    o.pack()
-    fetchExebutton.pack()
-    button_border4.pack(padx=0,pady=10)
-    entry.pack()
-    title2.pack(padx=0,pady=10)
-    title3.pack()
-    jebbybutton.pack(padx=int(width/100), pady=20)
-    button_border3.pack(padx=0,pady=10)
-    entry2.pack()
-    fetchExebutton1.pack()
-    title4.pack(padx=0,pady=10)
-    button_border2.pack(padx=0,pady=10)
-    entry3.pack()
-    fetchExebutton2.pack()
-    title5.pack(padx=0,pady=10)
-    title.pack(padx=0,pady=10)
-    wallpaperbutton.pack(padx=int(width/100), pady=20)
-    button_border.pack(padx=0,pady=10)
-    entry4.pack()
-    fetchExebutton3.pack()
-    title6.pack()
-    darkbutton.pack(padx=int(width/100), pady=20)
-    lightbutton.pack(padx=int(width/100), pady=0)
-    bluebutton.pack(padx=int(width/100), pady=20)
-    title7.pack(padx=0,pady=200)
-    creditsbutton.pack(padx=int(width/100), pady=40)
-    title8.pack()
-
-    
-    title8.config(bg="#222027", fg="white")
-    creditsbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    title7.config(bg="#222027", fg="white")
-    output2.config(borderwidth=0, fg = "white", bg = "#222027", font='arial 13')
-    myframe2['bg']='#222027'
-    myframe['bg']='#222027'
-    wrapper['bg']='#222027'
-    root['bg']='#222027'
-    mycanva['bg']='#222027'
-    mycanvas['bg']='#222027'
-    text.config(fg="RoyalBlue1", bg= "RoyalBlue4")
-    style.configure("Vertical.TScrollbar", gripcount=0, background="RoyalBlue1", darkcolor="RoyalBlue4", lightcolor="RoyalBlue4", troughcolor="RoyalBlue4", bordercolor="RoyalBlue4", arrowcolor="white")
-    buttonframe.config(bg = "RoyalBlue4")
-    button1.config(fg = "white", bg = "RoyalBlue4", activebackground="red", activeforeground="white", borderwidth=0)
-    button2.config(fg = "white", bg = "RoyalBlue4", activebackground="white", activeforeground="black", borderwidth=0)
-    button3.config(fg = "white", bg = "RoyalBlue4", activebackground="white", activeforeground="black", borderwidth=0)
-    title6.config(bg="#222027", fg="white")
-    title5.config(bg="#222027", fg="RoyalBlue4")
-    title4.config(bg="#222027", fg="RoyalBlue4")
-    title3.config(bg="#222027", fg="RoyalBlue4", font=("arial 27 bold"))
-    title2.config(bg="#222027", fg="RoyalBlue4")
-    title.config(bg="#222027", fg="RoyalBlue4", font=("arial 27 bold"))
-    title1.config(bg="#222027", fg="RoyalBlue4", font=("arial 27 bold"))
-    o.config(bg="#222027", fg="RoyalBlue4")
-    warning.config(bg="#222027", fg="RoyalBlue4")
-    fetchExebutton3.config(font=("arial 15"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchExebutton2.config(font=("arial 15"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchExebutton1.config(font=("arial 15"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    entry.config(font=("arial 20"), bg="black", fg="white", borderwidth=2)
-    entry2.config(font=("arial 20"), bg="black", fg="white", borderwidth=2)
-    entry3.config(font=("arial 20"), bg="black", fg="white", borderwidth=2)
-    entry4.config(font=("arial 20"), bg="black", fg="white", borderwidth=2)
-    button_border.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
-    button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
-    button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
-    button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
-    fetchWifibutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchInfobutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchExebutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    jebbybutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    wallpaperbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    wrapper.config(borderwidth=0)
-    root.config(borderwidth=0)
-    lightbutton.config(bg="white", activebackground="gainsboro")
-    darkbutton.config(bg="black", activebackground="#212121")
-    if root.winfo_screenheight()==1080:
-        mycanva.configure(borderwidth=-3, highlightthickness=0)
-
-    else:
-        mycanva.configure(borderwidth=0, highlightthickness=0)
-    
-
-bluebutton=Button(myframe, text="Original Theme", font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, command=blue, width=20)
-bluebutton.pack(padx=int(width/100), pady=20)
-
-title7=Label(myframe, text="", font=("cambria 48 bold"), bg="black", fg="white")
-title7.pack(padx=0,pady=200)
-
-def showcredits():
-    output2.delete(1.0, tk.END)
-    filler = "\n*******************************\n"
-    creditText = f'''\n    Creator:  Jebby (obvs) \n    Contributers:  PengeSal 
-    {filler} Python Modules:\n     -Tkinter\n     -Platform\n     -Subprocess\n     -Shutil\n     -Threading\n     -OS\n     -Sys\n     -Ctypes\n     -Win32API\n     -Win32Con\n     -Sys\n
+    creditText = f'''\n    Creator:  Jebby \n    Contributers:  PengeSal 
+    {filler} Python Modules:\n     -Tkinter\n     -Platform\n     -Subprocess\n     -Shutil\n     -Threading\n     -OS\n     -Sys\n     -Ctypes
     {filler} Tools:\n     -Python\n     -Visual Studio Code\n     -Github
     {filler} Icons:\n      -[Icon.ico] => imgbin\n   -[IconAlt.ico] => pngitem
     {filler}
     '''
-    output2.insert(tk.END, creditText)
 
-creditsbutton=Button(myframe, text="Credits", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=showcredits, width=20)
-creditsbutton.pack(padx=int(width/100), pady=40)
+    creditTextWidget = tk.Text(window_frame, wrap=tk.WORD, width=30, height=15) #create the text widget, allow wrapping
+    creditTextWidget.insert("1.0", creditText) #insert the text into the widget
 
-title8=Label(myframe, text="", font=("cambria 48 bold"), bg="black", fg="white")
-title8.pack()
+    creditTextWidget.tag_configure("creditTitle", font=(font,12, "bold"))
+    creditTextWidget.tag_configure("creditEnd", font=(font,10, "italic"))
+    creditTextWidget.tag_configure("squiggly", font=(font,10, "italic"))
+    creditTextWidget.insert("1.0", f"                   **CREDITS:** \n************************************\n", "creditTitle")
+    creditTextWidget.insert("end", "        Thank you for using this!", "creditEnd")
+    creditTextWidget.insert("end", "\n             ~~~~~~~~~~~~~~~\n\n", "squiggly")
+
+    # Create the Scrollbar widget and allow the scrollbar to move text pos
+    creditScrollbar = tk.Scrollbar(window_frame, command=creditTextWidget.yview)
+
+    # Configure the Text widget's yscrollcommand to remember the scroll bar pos and text pos
+    creditTextWidget.configure(yscrollcommand=creditScrollbar.set)
+
+    creditScrollbar.pack(side=tk.RIGHT, fill="y")
+    creditTextWidget.pack(side=tk.LEFT, fill="both", expand=True)
+
+    #creditTextWidget.config(bg=background, fg="white")
+    buttonConfig(creditTextWidget, isText=True, FontSize=15)
+    creditTextWidget.config(state=tk.DISABLED)
+
+####################################################################################################################################
+######[ PAGE 1 BUTTONS ]##############[ PAGE 1 BUTTONS ]##############[ PAGE 1 BUTTONS ]###############[ PAGE 1 BUTTONS ]###########
+
+fetchInfobutton = Button(window_frame, text="Fetch Sys Info", command=fetchInfopressed)
+buttonConfig(fetchInfobutton) #call Func, not bold, do Func for "fetchInfobutton"
+#fetchInfobutton.config(width=15, height=2)
+fetchInfobutton.pack()
+
+fetchWifibutton = Button(window_frame, text="Fetch WiFi Password", command=fetch_wifi_thread)
+buttonConfig(fetchWifibutton, w=20)
+#fetchWifibutton.config(width=20, height=2)
+fetchWifibutton.pack()
+
+fetchExebutton = Button(window_frame, text="Fetch EXE Path", command=fetchExe)
+buttonConfig(fetchExebutton)
+##fetchExebutton.config(width=15, height=2)
+fetchExebutton.pack()
+
+jebbyScriptbutton = Button(window_frame, text="Jebby's Script", command=jebbyScriptpressed)
+buttonConfig(jebbyScriptbutton, requestBold=True)
+#jebbyScriptbutton.config(width=15, height=2)
+jebbyScriptbutton.pack()
+
+####################################################################################################################################
+##########[ HOME BUTTON ]##############[ HOME BUTTONS ]##############[ HOME BUTTONS ]###############[ HOME BUTTONS ]################
+
+def homePressed():
+    forget_all_widgets(window_frame)
+    fetchInfobutton.pack()
+    fetchWifibutton.pack()
+    fetchExebutton.pack()
+    jebbyScriptbutton.pack()
+    canvasMain.pack()
+    homeButton.place_forget()
+    nextPagelabel.place(x=105, y=165)
+    forwardPagebutton.place(x=168, y=165)
+    window.unbind("<Return>")
+    window.bind("<Right>", Page2Pressed)
+    miscButton.place(x=260, y=0)
 
 
-canvasMain = Canvas(myframe, bg=background, highlightthickness=0)
+homeButton = Button(window, text="Home", command=homePressed)
+buttonConfig(homeButton, w=5, h=1)
+
+####################################################################################################################################
+##########[ CHANGELOG ]##############[ CHANGELOG ]##############[ CHANGELOG ]##############[ CHANGELOG ]###############[ CHANGELOG ]
+
+def changeLog():
+    changelogText = tk.Text(window_frame)
+    changelogText.insert("1.0", "TEST")
+    buttonConfig(changelogText, isText=True)
+    changelogText.pack()
+
+####################################################################################################################################
+##########[ MISC BUTTON ]##############[ MISC BUTTONS ]##############[ MISC BUTTONS ]###############[ MISC BUTTONS ]################
+
+def miscFunc():
+    if nextPagelabel.cget("text") == "Next Page":   #.cget("text") - get text, if its equal to "Next Page"
+        page=Page1Pressed
+    elif nextPagelabel.cget("text") == "Go Back":
+        page=Page2Pressed
+    
+    forget_all_widgets(window_frame)
+    nextPagelabel.place_forget()
+    forwardPagebutton.place_forget()
+    backPagebutton.place_forget()
+    miscButton.place_forget()
+    homeButton.place(x=0, y=300)
+    
+    homeButton.config(command=page)
+
+    ChangelogButton = Button(window_frame,text="Change Log", command=changeLog)
+    buttonConfig(ChangelogButton)
+    ChangelogButton.pack()
+
+miscButton = Button(window_frame, text="!", command=miscFunc)
+buttonConfig(miscButton, True, w = 1, h=1)
+miscButton.place(x=260, y=0)
+
+####################################################################################################################################
+##########[ PAGE 2 ]##############[ PAGE 2 ]##############[ PAGE 2 ]###############[ PAGE 2 ]################[ PAGE 2 ]#############
+
+def Page2Pressed(event=None):
+    forget_all_widgets(window_frame)
+    homeButton.place_forget()
+    clearMainhomeScreen()
+    nextPagelabel.place(x=110, y=165)
+    nextPagelabel.config(text="Go Back")
+    forwardPagebutton.place_forget()
+    backPagebutton.place(x=84, y=165)
+    canvasMain.pack_forget()
+    window.unbind("<Return>")
+    window.bind("<Left>", Page1Pressed)
+    miscButton.place(x=260, y=0)
+    page = Page2Pressed
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.config(bg=background)
+    invisiLabel.pack(pady=3)
+
+    ChgBgButton = Button(window_frame, text="Change Desktop Background", command=ChangeBackground)
+    #ChgBgButton.config(width=25, height=2)
+    buttonConfig(ChgBgButton, w=25)
+    ChgBgButton.pack()
+    
+    invisiLabel = Label(window_frame, text="")
+    invisiLabel.config(bg=background)
+    invisiLabel.pack(pady=4)
+
+    creditsButton = Button(window_frame, text="Credits", command=Credits)
+    creditsButton.config(width=15, height=2)
+    buttonConfig(creditsButton)
+    creditsButton.pack()
+
+    canvas2.pack()
+
+####################################################################################################################################
+##########[ PAGE 1 ]##############[ PAGE 1 ]##############[ PAGE 1 ]###############[ PAGE 1 ]################[ PAGE 1 ]#############
+
+def Page1Pressed(event=None):
+    forget_all_widgets(window_frame) #forget the next page's widgets, then display the new stuff
+    fetchInfobutton.pack()
+    fetchWifibutton.pack()
+    fetchExebutton.pack()
+    jebbyScriptbutton.pack()
+    forwardPagebutton.place(x=168, y=165)
+    backPagebutton.place_forget()
+    nextPagelabel.place(x=105, y=165)
+    nextPagelabel.config(text="Next Page")
+    canvasMain.pack()
+    canvas2.pack_forget()
+    window.bind("<Right>", Page2Pressed)
+    miscButton.place(x=260, y=0)
+    homeButton.place_forget()
+    
+
+nextPagelabel = Label(window, text="Next Page")
+nextPagelabel.config(fg = "white", bg = "RoyalBlue3")
+nextPagelabel.place(x=105, y=165)
+
+forwardPagebutton = Button(window, text="=>", command=Page2Pressed)
+forwardPagebutton.config(width=2, height=1)
+forwardPagebutton.place(x=168, y=165)
+forwardPagebutton.config(bg='RoyalBlue1', fg='white')
+
+backPagebutton = Button(window, text="<=", command=Page1Pressed)
+backPagebutton.config(width=2, height=1)
+backPagebutton.place(x=79, y=165)
+backPagebutton.config(bg='RoyalBlue1', fg='white')
+backPagebutton.place_forget()
+
+window.bind("<Right>", Page2Pressed)
+window.bind("<Left>", Page1Pressed)
+
+####################################################################################################################################
+##########[ THE DRAWING ROOM - PAGE 1 ]###############[ THE DRAWING ROOM - PAGE 1 ]#############[ THE DRAWING ROOM - PAGE 1 ]#######
+
+canvasMain = Canvas(window_frame, bg=background, highlightthickness=0)
 canvasMain.pack(fill=tk.BOTH, expand=True)
 
-canvasMain.create_arc(40,500,363,150, start=0, extent=180, fill="RoyalBlue4", outline="")
+# x0 y0 x1 y1
 
-canvasMain.create_oval(100,215,125,230, fill="RoyalBlue1", outline="") 
-canvasMain.create_oval(200,215,225,230, fill="RoyalBlue1", outline="") 
+canvasMain.create_oval(0,265,275,60, fill="RoyalBlue4", outline="")
 
-canvasMain.create_line(225,180,275,90, fill="RoyalBlue1", width=7) 
-canvasMain.create_line(125,180,50,100, fill="RoyalBlue1", width=7)
+canvasMain.create_oval(50,115,75,130, fill="RoyalBlue1", outline="") #left eye
+canvasMain.create_oval(150,115,175,130, fill="RoyalBlue1", outline="") #right eye
 
-canvasMain["bg"]="#222027"
+canvasMain.create_line(175,80,200,36, fill="RoyalBlue1", width=5) #right antenna
+canvasMain.create_line(75,80,40,36, fill="RoyalBlue1", width=5) #left antenna
 
-canvasMain.pack_forget()
+####################################################################################################################################
+##########[ THE DRAWING ROOM - PAGE 2 ]###############[ THE DRAWING ROOM - PAGE 2 ]#############[ THE DRAWING ROOM - PAGE 2 ]#######
 
 
+canvas2 = Canvas(window_frame, bg=background, highlightthickness=0)
+canvas2.pack(fill=tk.BOTH, expand=True)
 
-root.mainloop()
+
+canvas2.create_oval(0,500,275,60, fill="RoyalBlue4", outline="")
+
+canvas2.create_oval(70,115,95,130, fill="RoyalBlue1", outline="") #left eye
+canvas2.create_oval(150,115,175,130, fill="RoyalBlue1", outline="") #right eye
+
+canvas2.create_line(175,80,200,36, fill="RoyalBlue1", width=5) #right antenna
+canvas2.create_line(90,80,60,36, fill="RoyalBlue1", width=5) #left antenna
+
+
+canvas2.create_arc(70,115,95,130, start=0, extent=200, fill="RoyalBlue4", outline="") #left eyeshadow
+canvas2.create_arc(150,115,175,130, start=0, extent=200, fill="RoyalBlue4", outline="") #right eyeshadow
+
+####################################################################################################################################
+##########[ DONT TOUCH ]############[ DONT TOUCH ]#############[ DONT TOUCH ]############[ DONT TOUCH ]#########[ DONT TOUCH ]######
+
+window.mainloop()
