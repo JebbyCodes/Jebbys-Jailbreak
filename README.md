@@ -63,6 +63,7 @@
 
 ## Notes:
 - If you encounter any issues then please file an 'Issues' report.
+- Feel free to fork this repo!
 
 ---
 
