@@ -760,6 +760,7 @@ bluebutton.pack(padx=int(width/100), pady=20)
 
 def pet():
     window = Tk()
+    window.attributes("-topmost", True)
     button_pressed = False
 
     def toggle(event):
