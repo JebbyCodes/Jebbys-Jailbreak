@@ -815,7 +815,7 @@ def pink():
     darkbutton.config(bg="#212121", activebackground="#474747")
     root.config(borderwidth=0)
 
-pinkbutton=Button(myframe, text="Egirl Theme (ꈍᴗꈍ)♡", font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="black", borderwidth=0, command=pink, width=19)
+pinkbutton=Button(myframe, text="♡ Slovenian Theme ♡", font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="black", borderwidth=0, command=pink, width=19)
 pinkbutton.pack(padx=int(width/100), pady=0)
 
 def pet():
