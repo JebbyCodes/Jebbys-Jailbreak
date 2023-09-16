@@ -830,7 +830,7 @@ def pet():
         else:
              window.withdraw()
 
-    rany=random.randint(0, window.winfo_screenwidth())
+    rany=random.randint(0, window.winfo_screenheight())
     ranx=random.randint(0, window.winfo_screenwidth())
     window.geometry(f"128x128+{ranx}+{rany}")
     window.overrideredirect(True)
