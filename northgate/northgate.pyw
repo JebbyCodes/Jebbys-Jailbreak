@@ -518,7 +518,7 @@ def dark():
     f.close()
     
     title8.config(bg="black", fg="white")
-    creditsbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
+    creditsbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)
     title7.config(bg="black", fg="white")
     output2.config(borderwidth=0, fg = "white", bg = "black", font='arial 13')
     myframe2['bg']='black'
@@ -527,7 +527,7 @@ def dark():
     root['bg']='black'
     mycanva['bg']='black'
     mycanvas['bg']='black'
-    text.config(fg="#474747", bg="#212121")
+    text.config(text="Jebby's Jailbrəak", fg="#474747", bg="#212121")
     style.configure("Vertical.TScrollbar", gripcount=0, background="#474747", darkcolor="#212121", lightcolor="#212121", troughcolor="#212121", bordercolor="#212121", arrowcolor="white")
     buttonframe.config(bg = "#212121")
     button1.config(fg = "white", bg = "#212121", activebackground="red", activeforeground="white", borderwidth=0)
@@ -553,12 +553,12 @@ def dark():
     button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
     button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
     button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#212121")
-    fetchWifibutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)   
-    fetchInfobutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    fetchExebutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    corianderbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
+    fetchWifibutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)   
+    fetchInfobutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)
+    fetchExebutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)
+    corianderbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)
     jebbybutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
-    wallpaperbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0)
+    wallpaperbutton.config(font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, width=20)
     wrapper.config(borderwidth=0)
     root.config(borderwidth=0)
     lightbutton.config(bg="white", activebackground="gainsboro")
@@ -579,7 +579,7 @@ def light():
     f.close()
     
     title8.config(bg="white", fg="#999999")
-    creditsbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
+    creditsbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
     title7.config(bg="white", fg="#999999")
     output2.config(borderwidth=0, fg = "black", bg = "white", font='arial 13')
     myframe2['bg']='white'
@@ -591,7 +591,7 @@ def light():
     wrapper.config(borderwidth=1)
     style.configure("Vertical.TScrollbar", gripcount=0, background="white", darkcolor="gainsboro", lightcolor="gainsboro", troughcolor="gainsboro", bordercolor="gainsboro", arrowcolor="black")
     buttonframe.config(bg = "white")
-    text.config(fg="#999999", bg="white")
+    text.config(text="Jebby's Jailbrəak", fg="#999999", bg="white")
     button1.config(fg = "black", bg = "white", activebackground="red", activeforeground="white", borderwidth=0)
     button2.config(fg = "black", bg = "white", activebackground="gainsboro", activeforeground="white", borderwidth=0)
     button3.config(fg = "black", bg = "white", activebackground="gainsboro", activeforeground="white", borderwidth=0)
@@ -616,14 +616,14 @@ def light():
     button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
     button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
     button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=2, bg="#707070")
-    fetchWifibutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)   
-    fetchInfobutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    fetchExebutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    corianderbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    jebbybutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
-    wallpaperbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
+    fetchWifibutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)   
+    fetchInfobutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
+    fetchExebutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
+    corianderbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
+    jebbybutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
+    wallpaperbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
     canvasMain.pack_forget()
-    powershellbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0)
+    powershellbutton.config(font=("cambria 24"), bg="gainsboro", fg="black", activebackground="white", activeforeground="black", borderwidth=0, width=20)
     lightbutton.config(bg="gainsboro", activebackground="white")
     darkbutton.config(bg="#212121", activebackground="#474747")
 
@@ -650,6 +650,7 @@ def blue():
     o.pack_forget()
     warning.pack_forget()
     fetchExebutton3.pack_forget()
+    pinkbutton.pack_forget()
     fetchExebutton2.pack_forget()
     fetchExebutton1.pack_forget()
     entry.pack_forget()
@@ -699,14 +700,15 @@ def blue():
     darkbutton.pack(padx=int(width/100), pady=20)
     lightbutton.pack(padx=int(width/100), pady=0)
     bluebutton.pack(padx=int(width/100), pady=20)
-    corianderbutton.pack(padx=0, pady=50)
+    pinkbutton.pack(padx=int(width/100), pady=0)
+    corianderbutton.pack(padx=0, pady=75)
     title7.pack(padx=0,pady=200)
     creditsbutton.pack(padx=int(width/100), pady=40)
     title8.pack()
 
     
     title8.config(bg="#222027", fg="white")
-    creditsbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
+    creditsbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
     title7.config(bg="#222027", fg="white")
     output2.config(borderwidth=0, fg = "white", bg = "#222027", font='arial 13')
     myframe2['bg']='#222027'
@@ -715,7 +717,7 @@ def blue():
     root['bg']='#222027'
     mycanva['bg']='#222027'
     mycanvas['bg']='#222027'
-    text.config(fg="RoyalBlue1", bg= "RoyalBlue4")
+    text.config(text="Jebby's Jailbrəak", fg="RoyalBlue1", bg= "RoyalBlue4")
     style.configure("Vertical.TScrollbar", gripcount=0, background="RoyalBlue1", darkcolor="RoyalBlue4", lightcolor="RoyalBlue4", troughcolor="RoyalBlue4", bordercolor="RoyalBlue4", arrowcolor="white")
     buttonframe.config(bg = "RoyalBlue4")
     button1.config(fg = "white", bg = "RoyalBlue4", activebackground="red", activeforeground="white", borderwidth=0)
@@ -741,22 +743,80 @@ def blue():
     button_border2.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
     button_border3.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
     button_border4.config(highlightbackground = "black", highlightthickness = 0, bd=0, bg="#212121")
-    fetchWifibutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchInfobutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    fetchExebutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    jebbybutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    corianderbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
-    wallpaperbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)
+    fetchWifibutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
+    fetchInfobutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
+    fetchExebutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
+    jebbybutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
+    corianderbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
+    wallpaperbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, width=20)
     wrapper.config(borderwidth=0)
     root.config(borderwidth=0)
     lightbutton.config(bg="white", activebackground="gainsboro")
     darkbutton.config(bg="black", activebackground="#212121")
     powershellbutton.config(font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2)  
 
-    
-
 bluebutton=Button(myframe, text="Original Theme", font=("arial 23"), bg="RoyalBlue4", fg="white", activebackground="white", activeforeground="black", borderwidth=2, command=blue, width=20)
 bluebutton.pack(padx=int(width/100), pady=20)
+
+
+def pink():
+    f= open('theme.txt', "r+") 
+    f.truncate(0)
+    f.write("pink")
+    f.close()
+    
+    title8.config(bg="#ffc9eb", fg="#ff8ad4")
+    creditsbutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    title7.config(bg="#ffc9eb", fg="#ff8ad4")
+    output2.config(borderwidth=0, fg = "#00752b", bg = "#ffc9eb", font='arial 13')
+    myframe2['bg']='#ffc9eb'
+    myframe['bg']='#ffc9eb'
+    wrapper['bg']='#ffc9eb'
+    root['bg']='#ffc9eb'
+    mycanva['bg']='#ffc9eb'
+    mycanvas['bg']='#ffc9eb'
+    wrapper.config(borderwidth=0)
+    style.configure("Vertical.TScrollbar", gripcount=0, background="#ffc9eb", darkcolor="#ff8ad4", lightcolor="#ff8ad4", troughcolor="#ff8ad4", bordercolor="#ff8ad4", arrowcolor="white")
+    buttonframe.config(bg = "#ff8ad4")
+    text.config(text="(ꈍᴗꈍ)♡", fg="white", bg="#ff8ad4")
+    button1.config(fg = "white", bg = "#ff8ad4", activebackground="red", activeforeground="white", borderwidth=0)
+    button2.config(fg = "white", bg = "#ff8ad4", activebackground="#ffc9eb", activeforeground="#00752b", borderwidth=0)
+    button3.config(fg = "white", bg = "#ff8ad4", activebackground="#ffc9eb", activeforeground="#00752b", borderwidth=0)
+    title6.config(bg="#ffc9eb", fg="black")
+    root.config(borderwidth=1)
+    title5.config(bg="#ffc9eb", fg="#ff8ad4")
+    title4.config(bg="#ffc9eb", fg="#ff8ad4")
+    title3.config(bg="#ffc9eb", fg="#ff8ad4", font=("harrington 28 bold"))
+    title2.config(bg="#ffc9eb", fg="#ff8ad4")
+    title.config(bg="#ffc9eb", fg="#ff8ad4", font=("harrington 28 bold"))
+    title1.config(bg="#ffc9eb", fg="#ff8ad4", font=("harrington 28 bold"))
+    o.config(bg="#ffc9eb", fg="#ff8ad4")
+    warning.config(bg="#ffc9eb", fg="#ff8ad4")
+    fetchExebutton3.config(font=("arial 15"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#ffe0f4", borderwidth=0)
+    fetchExebutton2.config(font=("arial 15"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#ffe0f4", borderwidth=0)
+    fetchExebutton1.config(font=("arial 15"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#ffe0f4", borderwidth=0)
+    entry.config(font=("arial 20"), bg="#ffc9eb", fg="#00752b", borderwidth=0)
+    entry2.config(font=("arial 20"), bg="#ffc9eb", fg="#00752b", borderwidth=0)
+    entry3.config(font=("arial 20"), bg="#ffc9eb", fg="#00752b", borderwidth=0)
+    entry4.config(font=("arial 20"), bg="#ffc9eb", fg="#00752b", borderwidth=0)
+    button_border.config(highlightbackground = "#ff8ad4", highlightthickness = 0, bd=2, bg="#ff8ad4")
+    button_border2.config(highlightbackground = "#ff8ad4", highlightthickness = 0, bd=2, bg="#ff8ad4")
+    button_border3.config(highlightbackground = "#ff8ad4", highlightthickness = 0, bd=2, bg="#ff8ad4")
+    button_border4.config(highlightbackground = "#ff8ad4", highlightthickness = 0, bd=2, bg="#ff8ad4")
+    fetchWifibutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)   
+    fetchInfobutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    fetchExebutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    corianderbutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    jebbybutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    wallpaperbutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    canvasMain.pack_forget()
+    powershellbutton.config(font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="#00752b", borderwidth=0, width=19)
+    lightbutton.config(bg="white", activebackground="gainsboro")
+    darkbutton.config(bg="#212121", activebackground="#474747")
+    root.config(borderwidth=0)
+
+pinkbutton=Button(myframe, text="Egirl Theme (ꈍᴗꈍ)♡", font=("harrington 24 bold"), bg="#ff8ad4", fg="white", activebackground="#ffe0f4", activeforeground="black", borderwidth=0, command=pink, width=19)
+pinkbutton.pack(padx=int(width/100), pady=0)
 
 def pet():
     window = Tk()
@@ -774,7 +834,7 @@ def pet():
     ranx=random.randint(0, window.winfo_screenwidth())
     window.geometry(f"128x128+{ranx}+{rany}")
     window.overrideredirect(True)
-    window.title("Jebby's Jailbrəak")
+    window.title("Coriander")
 
     bg = tk.PhotoImage(master=window, file="skin1.png")
     buttonframe = tk.Label(window, image=bg)
@@ -816,11 +876,11 @@ def pet():
     window.mainloop()
     
 corianderbutton=Button(myframe, text="Coriander Pet", font=("cambria 24"), bg="#212121", fg="white", activebackground="#474747", activeforeground="white", borderwidth=0, command=pet, width=20)
-corianderbutton.pack(padx=0, pady=50)
+corianderbutton.pack(padx=0, pady=75)
 
 
 title7=Label(myframe, text="", font=("cambria 48 bold"), bg="black", fg="white")
-title7.pack()
+title7.pack(padx=0, pady=200)
 
 def showcredits(): 
     output2.delete(1.0, tk.END)
@@ -864,6 +924,8 @@ with open('theme.txt', "r") as f:
         light()
     elif lines=="['blue']":
         blue()
+    elif lines=="['pink']":
+        pink()
     else:
         dark()
 
