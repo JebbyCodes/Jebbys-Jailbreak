@@ -191,7 +191,7 @@ def fetch_wifi_thread():
         wallpaperbutton.config(state=tk.DISABLED)
         powershellbutton.config(state=tk.DISABLED)
         corianderbutton.config(state=tk.DISABLED)
-        
+        pinkbutton.config(state=tk.DISABLED)
         
         a = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
         a = [i.split(":")[1][1:-1] for i in a if "All User Profile" in i]
@@ -222,6 +222,7 @@ def fetch_wifi_thread():
         wallpaperbutton.config(state=tk.NORMAL)
         powershellbutton.config(state=tk.NORMAL)
         corianderbutton.config(state=tk.NORMAL)
+        pinkbutton.config(state=tk.NORMAL)
             
     thread = threading.Thread(target=fetch_wifi)
     thread.start()
