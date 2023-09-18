@@ -1,9 +1,10 @@
-## 22/7/23 V8 - Experimental    [https://github.com/JebbyCodes/Jebbys-Jailbreak]
+## 22/7/23 V8.5 - Experimental    [https://github.com/JebbyCodes/Jebbys-Jailbreak]
 import platform #sysinfo
 import subprocess #wifi
 import shutil #filefinder
 from tkinter import *
 import tkinter as tk
+from tkinter import filedialog #open file prompt
 import threading
 import os #jebbyscript
 import sys #private file ref
@@ -12,18 +13,100 @@ import ctypes #wallpaper
 #############################################################################################################
 ###########[ CONFIGS ]###############[ CONFIGS ]############[ CONFIGS ]###########[ CONFIGS ]###############
 
+#~~[ General Theming ]~~#
 font = "Segoe UI"
 boldFont = "Arial", "bold"
-background = '#222027'
+WinBackground = '#222027'
+WidgetBackground = "RoyalBlue4"
+textColour = "white"
+#~~[                 ]~~#
 icon = os.path.join(sys.path[0], "Icon.ico")
 iconAlt = os.path.join(sys.path[0], "IconAlt.ico")
 iconTest = os.path.join(sys.path[0], "IconTest.ico")
 filler = "\n*******************************\n"
-exitKey = "<Alt_R>" #Alt Gr
+exitKey = "<Alt-Key>" #Alt + a
 window_width = 275
 window_height = 325
 ResizeX = False
 ResizeY = False
+saveFile = os.path.join(sys.path[0], "Save.jeb")
+
+##################################################################################################################################
+########[ THEMES ]##########[ THEMES ]############[ THEMES ]#########[ THEMES ]#########[ THEMES ]#######[ THEMES ]###############
+with open(saveFile, 'r') as file:
+    lines = file.readlines()
+#########################~~~~[ Dark Theme ]~~~~####################################
+global darkTheme
+def darkTheme():
+    global WidgetBackground, textColour, WinBackground
+    WidgetBackground = "#474747"
+    textColour = "White"
+    WinBackground = "Black"
+
+    window_frame['bg']=WinBackground
+    canvasMain['bg']=WinBackground
+    canvas2['bg']=WinBackground
+
+    with open(saveFile, "w") as file:
+        for line in lines:
+            if line.strip() == "Theme = default":
+                file.write("Theme = dark" + '\n')
+                print("Theme = dark")
+            else:
+                file.write(line)
+                print(line, end="")
+        
+
+    for widget in window_frame.winfo_children(): #for every widget in window_frame
+        if isinstance(widget, tk.Button): #if the widget is a button
+            Font = widget.cget("font") #{
+            w = widget.cget("width")   #    fetch original configs
+            h = widget.cget("height")#                              }
+            buttonConfig(widget)
+            widget.config(font=Font, width=w, height=h)
+            buttonConfig(homeButton, w=5, h=1)
+            themeDarkButton.config(bg="Black")
+            themeDefaultButton.config(bg="RoyalBlue4")
+            Page1Pressed()
+        else:
+            return
+#########################~~~~[ Dark Theme ]~~~~####################################
+
+#########################~~~~[ Default Theme ]~~~~#################################
+global defaultTheme
+def defaultTheme():
+    global WidgetBackground, textColour, WinBackground
+    WidgetBackground = "RoyalBlue4"
+    textColour = "White"
+    WinBackground = "#222027"
+
+    window_frame['bg']=WinBackground
+    canvasMain['bg']=WinBackground
+    canvas2['bg']=WinBackground
+
+    with open(saveFile, "w") as file:
+        for line in lines:
+            if line.strip() == "Theme = dark":
+                file.write("Theme = default" + '\n')
+                print("Theme = default")
+            else:
+                file.write(line)
+                print(line, end="")
+        
+
+    for widget in window_frame.winfo_children(): #for every widget in window_frame
+        if isinstance(widget, tk.Button): #if the widget is a button or label
+            Font = widget.cget("font") #{
+            w = widget.cget("width")   #    fetch original configs
+            h = widget.cget("height")#                              }
+            buttonConfig(widget)
+            buttonConfig(homeButton, w=5, h=1)
+            widget.config(font=Font, width=w, height=h)
+            themeDarkButton.config(bg="Black")
+            Page1Pressed()
+        else:
+            return
+#########################~~~~[ Default Theme ]~~~~#################################
 
 """
 # buttonComConfig(exampleButton) Calls Func, not bold, edits given button
@@ -34,7 +117,9 @@ ResizeY = False
                 ||requestBold is False by default||     is custom keyword, 2nd is
                                                         object "button" (tkinter)
 """
-def buttonConfig(button=None, requestBold=False, FontSize=None, Font=None, isText=False, w=None, h=None): #func allows button widgets
+
+def buttonConfig(button=None, requestBold=False, FontSize=None, Font=None, isText=False, isInvisi=False, w=None, h=None): #func allows button widgets
+
     if button: #if button request fulfilled
 
         if FontSize is None:
@@ -48,12 +133,17 @@ def buttonConfig(button=None, requestBold=False, FontSize=None, Font=None, isTex
             h = 2
             
         if requestBold: #if "requestBold" is True
-            button.config(font=(boldFont, FontSize), fg = "white", bg = "RoyalBlue4", width = w, height = h)
+            button.config(font=(boldFont, FontSize), fg = textColour, bg = WidgetBackground, width = w, height = h)
+            return textColour, WidgetBackground
         else:
-            button.config(font=(Font, FontSize), fg = "white", bg = "RoyalBlue4", width = w, height = h)
+            button.config(font=(Font, FontSize), fg = textColour, bg = WidgetBackground, width = w, height = h)
 
         if isText:
-            button.config(bg=background, fg="white", font=(Font, 9)) #fix, must use variable
+            button.config(bg=WidgetBackground, fg=textColour, font=(Font, 9)) #fix, must use variable
+            return textColour, WidgetBackground, WinBackground
+        if isInvisi:
+            button.config(bg=WinBackground, fg=WinBackground)
+            return WinBackground
 
 #############################################################################################################
 ########[ NOTES ]##########[ NOTES ]############[ NOTES ]#########[ NOTES ]#########[ NOTES ]#######[ NOTES ]
@@ -94,6 +184,8 @@ def clearMainhomeScreen():
     forwardPagebutton.place_forget()
     backPagebutton.place_forget()
     miscButton.place_forget()
+    themeDarkButton.place_forget()
+    themeDefaultButton.place_forget()
     window.unbind("<Right>")
     window.unbind("<Left>")
 
@@ -119,7 +211,7 @@ center_window(window, window_width, window_height)
 
 window_frame = tk.Frame(window)
 window_frame.pack(fill=tk.BOTH, expand=True)
-window_frame['bg']=background
+window_frame['bg']=WinBackground
 
 #############################################################################################################
 #########[ CLEAR WINDOW_FRAME ]###########[ CLEAR WINDOW_FRAME ]###########[ CLEAR WINDOW_FRAME ]############
@@ -165,7 +257,7 @@ def fetchInfopressed():
     sysInfo.insert("end", f"\n {platform.architecture()}", "normal")
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    sysInfo.configure(bg=background, fg="white")
+    sysInfo.configure(bg=WinBackground, fg="white")
     sysInfo.pack()    
 
 ####################################################################################################################################
@@ -187,16 +279,16 @@ def fetch_wifi_thread():
 
         
 
-        wifiResultsframe = tk.Frame(window_frame, bg="RoyalBlue4")
+        wifiResultsframe = tk.Frame(window_frame, bg=WidgetBackground)
         wifiResultsframe.pack(side=tk.BOTTOM,fill=tk.BOTH, expand=True)
         wifiResultsframe.pack_propagate(False)
 
         wifiUserindicateLabel = Label(window_frame, text="USERNAME:")
-        wifiUserindicateLabel.config(bg=background, fg="white")
+        wifiUserindicateLabel.config(bg=WinBackground, fg="white")
         wifiUserindicateLabel.pack(side=tk.LEFT, padx=5, pady=5)
 
         wifiPassindicateLabel = Label(window_frame, text="PASSWORD:")
-        wifiPassindicateLabel.config(bg=background, fg="white")
+        wifiPassindicateLabel.config(bg=WinBackground, fg="white")
         wifiPassindicateLabel.pack(side=tk.RIGHT, padx=5, pady=5)
 
         a = subprocess.check_output(['netsh', 'wlan', 'show', 'profiles']).decode('utf-8', errors="ignore").split('\n')
@@ -209,17 +301,17 @@ def fetch_wifi_thread():
                     WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                     WifiUsertext.insert(tk.END, "{:<15}| {:<}".format(i, results[0]))
                     WifiUsertext.pack(pady=7)
-                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
+                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=WinBackground, fg="white")
                 except IndexError:
                     WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                     WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, ""))
                     WifiUsertext.pack(pady=7)
-                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
+                    WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=WinBackground, fg="white")
             except subprocess.CalledProcessError:
                 WifiUsertext = tk.Text(wifiResultsframe, wrap=tk.WORD, height=1, width=30)
                 WifiUsertext.insert(tk.END, "{:<15}|  {:<}".format(i, "ENCODING ERROR"))
                 WifiUsertext.pack(pady=7)
-                WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=background, fg="white")
+                WifiUsertext.config(state=tk.DISABLED, highlightthickness=0, bg=WinBackground, fg="white")
         
         fetchWifibutton.config(state=tk.NORMAL)  # Enable the button after fetching
         fetchInfobutton.config(state=tk.NORMAL)
@@ -243,7 +335,7 @@ def fetchExe():
 
     invisiLabel = Label(window_frame, text="")
     invisiLabel.pack(pady=15)
-    invisiLabel.config(bg=background)
+    invisiLabel.config(bg=WinBackground)
 
     exeEntry = Entry(window_frame)
     exeEntry.pack(side=tk.TOP, padx=30, fill=tk.X)
@@ -263,15 +355,15 @@ def fetchExe():
             GotExePath.insert(tk.END, f"Path to file: {path}")
             GotExePath.config(state=tk.DISABLED, highlightthickness=0)
             GotExePath.pack()
-            NoExePath.config(text="", bg=background)
+            NoExePath.config(text="", bg=WinBackground)
 
     subExebutton = Button(window_frame, text="Fetch Path", command=getExeentry)
     
-    subExebutton.config(fg = "white", bg = "RoyalBlue4")
+    subExebutton.config(fg = "white", bg = WidgetBackground)
     subExebutton.pack()
 
     NoExePath = Label(window_frame, text="", wraplength=200)
-    NoExePath.config(bg=background)
+    NoExePath.config(bg=WinBackground)
     NoExePath.pack()
     GotExePath = tk.Text(window_frame, wrap=tk.WORD, height=3, width=20)
     GotExePath.insert(tk.END, "")
@@ -289,54 +381,60 @@ def jebbyScriptpressed():
 
     invisiLabel = Label(window_frame, text="")
     invisiLabel.pack(pady=15)
-    invisiLabel.config(bg=background)
+    invisiLabel.config(bg=WinBackground)
     pathEntry = Entry(window_frame, width=30)
     pathEntry.pack(ipady=6)
 
-    banSymbol = ['"', '|', '?', '/', '<', '>', '*']
+    banSymbol = ['"', '|', '?', '<', '>', '*']
+
+    
+
 
     def jebButtonpressed(event=None):
+
         if any(symbol in pathEntry.get() for symbol in banSymbol):
-            errorLabel = Label(window_frame,text="ERROR: Forbidden Symbols Used")
-            errorLabel.pack()
+            errorLabelSrc.config(text="", bg=WinBackground)
+            errorLabel.config(text="ERROR: Forbidden Symbols Used", bg="White")
+
+        elif not os.path.exists(pathEntry.get()):
+            errorLabel.config(text="", bg=WinBackground)
+            errorLabelSrc.config(text=f"ERROR: Source File Path not found at '{pathEntry.get()}'", bg="white")
+            return
+            
         else:
             pathEntry.forget()
             jebbyButton.forget()
             seldesLabel = Label(window_frame,text="Select destination:")
             seldesLabel.pack()
-            destEntry = Entry(window_frame, width = 15)
-            destEntry.pack()
+            destEntry = Entry(window_frame, width=30)
+            destEntry.pack(ipady=6)
+            jailbreakBrowseButton.forget()
+            errorLabelSrc.forget()
 
-            errorLabelBoth = Label(window_frame, wraplength=200, bg=background)
-            errorLabelSrc = Label(window_frame, wraplength=200, bg=background)
-            errorLabelDst = Label(window_frame, wraplength=200, bg=background)
+            def browseForJailbreakDest():
+                errorLabelDst.forget()
+                jailbreakBrowse = str(filedialog.askdirectory())
+                destEntry.delete(0, 'end')
+                destEntry.insert(0, jailbreakBrowse)
+
+            jailbreakBrowseDestButton = Button(window_frame, text="Browse Files", command=browseForJailbreakDest)
+            buttonConfig(jailbreakBrowseDestButton, w=10, h=1)
+            jailbreakBrowseDestButton.pack(pady=10)
+
+            errorLabelDst = Label(window_frame, wraplength=200, bg=WinBackground)
 
             def destGopressed(event=None):
                 src_path = rf'{pathEntry.get()}'
                 dst_path = rf'{destEntry.get()}'
 
-                if not os.path.exists(dst_path) and not os.path.exists(src_path):
-                    errorLabelBoth.config(text=f"Error: Source File Path not found at '{src_path}'\n \nError: Destination Path not found at '{dst_path}'", bg="white")
-                    errorLabelBoth.pack()
-                    errorLabelSrc.forget()
+                if not os.path.exists(src_path):
                     errorLabelDst.forget()
-                    return
-
-                elif not os.path.exists(src_path):
-                    errorLabelSrc.config(text=f"Error: Source File Path not found at '{src_path}'", bg="white")
-                    errorLabelSrc.pack()
-                    errorLabelDst.forget()
-                    errorLabelBoth.forget()
                     return
                     
                 elif not os.path.exists(dst_path):
                     errorLabelDst.config(text=f"Error: Destination Path not found at '{dst_path}'", bg="white")
                     errorLabelDst.pack()
-                    errorLabelBoth.forget()
-                    errorLabelSrc.forget()
-                    return
-                    
-                
+                    return    
                 
                 finalDestpath = os.path.join(dst_path, os.path.basename(src_path)) #finalDestination/wee/poo/foo.abc
 
@@ -351,22 +449,41 @@ def jebbyScriptpressed():
                 #os.rename(get the original untouched final destination, renamed to the full directory of the original untouched final destination joined with the brand new file[Chrome.abc])
                 os.rename(finalDestpath, os.path.join(os.path.dirname(finalDestpath), NewFileName))
 
+                errorLabelDst.forget()
                 successLabel = Label(window_frame, text="Jailbroken Successfully!")
                 successLabel.pack()
                 
 
             destGobutton = Button(window_frame, text="Confirm", command=destGopressed)
-            buttonConfig(destGobutton)
-            destGobutton.pack()
+            buttonConfig(destGobutton, w=10, h=2)
+            destGobutton.pack(pady=5)
             window.bind("<Return>", destGopressed)
+
+            
 
     invisiLabel = Label(window_frame, text="")
     invisiLabel.pack(pady=1)
-    invisiLabel.config(bg=background)
+    invisiLabel.config(bg=WinBackground)
     jebbyButton = Button(window_frame, text="Jailbreak!", command=jebButtonpressed)
     buttonConfig(jebbyButton)
     jebbyButton.config(width=15, height=2)
     jebbyButton.pack()
+
+    def browseForJailbreak():
+        jailbreakBrowse = str(filedialog.askopenfilename())
+        pathEntry.delete(0, 'end')
+        pathEntry.insert(0, jailbreakBrowse)
+
+    jailbreakBrowseButton = Button(window_frame, text="Browse Files", command=browseForJailbreak)
+    buttonConfig(jailbreakBrowseButton, w=10, h=1)
+    jailbreakBrowseButton.pack(pady=10)
+
+    errorLabel = Label(window_frame,text="", bg=WinBackground)
+    errorLabel.pack()
+
+    errorLabelSrc = Label(window_frame,text="", wraplength=200, bg=WinBackground)
+    errorLabelSrc.pack()
+    
 
     window.bind("<Return>", jebButtonpressed)
 
@@ -385,9 +502,11 @@ def ChangeBackground():
     window.unbind("<Right>")
     window.unbind("<Left>")
     miscButton.place_forget()
+    themeDarkButton.place_forget()
+    themeDefaultButton.place_forget()
 
     invisiLabel = Label(window_frame, text="")
-    invisiLabel.config(bg=background)
+    invisiLabel.config(bg=WinBackground)
     invisiLabel.pack(pady=5)
 
     bgPathEntry = Entry(window_frame)
@@ -434,10 +553,24 @@ def ChangeBackground():
         
 
     setBgButton = Button(window_frame, text="Set as background!", command=confirmBgPath)
-    setBgButton.config(width=15, height=2)
-    buttonConfig(setBgButton)
+    #setBgButton.config(width=15, height=2)
+    buttonConfig(setBgButton, w=15, h=2)
     setBgButton.pack()
     window.bind("<Return>", confirmBgPath)
+
+    def browseBg():
+        selectedBg = str(filedialog.askopenfilename())
+
+        errorPathLabel.forget()
+        errorExtensionLabel.forget()
+        chgBgDoingLabel.forget()
+
+        bgPathEntry.delete(0, 'end')
+        bgPathEntry.insert(0, selectedBg)
+
+    browseBgButton = Button(window_frame, text="Browse Files", command=browseBg)
+    buttonConfig(browseBgButton, w=10, h=1)
+    browseBgButton.pack(pady=10)
 
 #######################[ END OF JAILBREAKS - PAGE 2 ]#######################[ END OF JAILBREAKS - PAGE 2 ]##########################
 ####################################################################################################################################
@@ -454,6 +587,8 @@ def Credits():
     window.unbind("<Right>")
     window.unbind("<Left>")
     miscButton.place_forget()
+    themeDarkButton.place_forget()
+    themeDefaultButton.place_forget()
 
     creditText = f'''\n    Creator:  Jebby \n    Contributers:  PengeSal 
     {filler} Python Modules:\n     -Tkinter\n     -Platform\n     -Subprocess\n     -Shutil\n     -Threading\n     -OS\n     -Sys\n     -Ctypes
@@ -524,6 +659,8 @@ def homePressed():
     window.unbind("<Return>")
     window.bind("<Right>", Page2Pressed)
     miscButton.place(x=260, y=0)
+    themeDarkButton.place(x=0, y=0)
+    themeDefaultButton.place(x=15, y=0)
 
 
 homeButton = Button(window, text="Home", command=homePressed)
@@ -560,9 +697,23 @@ def miscFunc():
     buttonConfig(ChangelogButton)
     ChangelogButton.pack()
 
+
 miscButton = Button(window_frame, text="!", command=miscFunc)
-buttonConfig(miscButton, True, w = 1, h=1)
+buttonConfig(miscButton, requestBold=True, w = 1, h=1)
 miscButton.place(x=260, y=0)
+
+####################################################################################################################################
+#############[ CUSTOMISE BUTTONS ]################[ CUSTOMISE BUTTONS ]##################[ CUSTOMISE BUTTONS ]######################
+
+
+themeDarkButton = Button(window_frame, text="", command=darkTheme)
+themeDarkButton.config(bg="Black", width=1, height=1)
+themeDarkButton.place(x=0, y=0)
+
+themeDefaultButton = Button(window_frame, text="",command = defaultTheme)
+buttonConfig(themeDefaultButton, w=1, h=1)
+themeDefaultButton.place(x=15,y=0)
+
 
 ####################################################################################################################################
 ##########[ PAGE 2 ]##############[ PAGE 2 ]##############[ PAGE 2 ]###############[ PAGE 2 ]################[ PAGE 2 ]#############
@@ -579,11 +730,14 @@ def Page2Pressed(event=None):
     window.unbind("<Return>")
     window.bind("<Left>", Page1Pressed)
     miscButton.place(x=260, y=0)
+    themeDarkButton.place(x=0, y=0)
+    themeDefaultButton.place(x=15, y=0)
     page = Page2Pressed
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     invisiLabel = Label(window_frame, text="")
-    invisiLabel.config(bg=background)
+    #invisiLabel.config(bg=WinBackground)
+    buttonConfig(invisiLabel, isInvisi=True, w=1, h=1)
     invisiLabel.pack(pady=3)
 
     ChgBgButton = Button(window_frame, text="Change Desktop Background", command=ChangeBackground)
@@ -592,7 +746,8 @@ def Page2Pressed(event=None):
     ChgBgButton.pack()
     
     invisiLabel = Label(window_frame, text="")
-    invisiLabel.config(bg=background)
+    #invisiLabel.config(bg=WinBackground)
+    buttonConfig(invisiLabel, isInvisi=True, w=1, h=1)
     invisiLabel.pack(pady=4)
 
     creditsButton = Button(window_frame, text="Credits", command=Credits)
@@ -619,22 +774,22 @@ def Page1Pressed(event=None):
     canvas2.pack_forget()
     window.bind("<Right>", Page2Pressed)
     miscButton.place(x=260, y=0)
+    themeDarkButton.place(x=0, y=0)
+    themeDefaultButton.place(x=15, y=0)
     homeButton.place_forget()
     
 
 nextPagelabel = Label(window, text="Next Page")
-nextPagelabel.config(fg = "white", bg = "RoyalBlue3")
+buttonConfig(nextPagelabel, isText=True, w=8, h=1)
 nextPagelabel.place(x=105, y=165)
 
 forwardPagebutton = Button(window, text="=>", command=Page2Pressed)
-forwardPagebutton.config(width=2, height=1)
+buttonConfig(forwardPagebutton, w=2, h=1)
 forwardPagebutton.place(x=168, y=165)
-forwardPagebutton.config(bg='RoyalBlue1', fg='white')
 
 backPagebutton = Button(window, text="<=", command=Page1Pressed)
-backPagebutton.config(width=2, height=1)
+buttonConfig(backPagebutton, w=2, h=1)
 backPagebutton.place(x=79, y=165)
-backPagebutton.config(bg='RoyalBlue1', fg='white')
 backPagebutton.place_forget()
 
 window.bind("<Right>", Page2Pressed)
@@ -643,7 +798,7 @@ window.bind("<Left>", Page1Pressed)
 ####################################################################################################################################
 ##########[ THE DRAWING ROOM - PAGE 1 ]###############[ THE DRAWING ROOM - PAGE 1 ]#############[ THE DRAWING ROOM - PAGE 1 ]#######
 
-canvasMain = Canvas(window_frame, bg=background, highlightthickness=0)
+canvasMain = Canvas(window_frame, bg=WinBackground, highlightthickness=0)
 canvasMain.pack(fill=tk.BOTH, expand=True)
 
 # x0 y0 x1 y1
@@ -659,8 +814,7 @@ canvasMain.create_line(75,80,40,36, fill="RoyalBlue1", width=5) #left antenna
 ####################################################################################################################################
 ##########[ THE DRAWING ROOM - PAGE 2 ]###############[ THE DRAWING ROOM - PAGE 2 ]#############[ THE DRAWING ROOM - PAGE 2 ]#######
 
-
-canvas2 = Canvas(window_frame, bg=background, highlightthickness=0)
+canvas2 = Canvas(window_frame, bg=WinBackground, highlightthickness=0)
 canvas2.pack(fill=tk.BOTH, expand=True)
 
 
@@ -675,6 +829,21 @@ canvas2.create_line(90,80,60,36, fill="RoyalBlue1", width=5) #left antenna
 
 canvas2.create_arc(70,115,95,130, start=0, extent=200, fill="RoyalBlue4", outline="") #left eyeshadow
 canvas2.create_arc(150,115,175,130, start=0, extent=200, fill="RoyalBlue4", outline="") #right eyeshadow
+
+#############################################################################################################
+########[ SAVE ]##########[ SAVE ]############[ SAVE ]#########[ SAVE ]#########[ SAVE ]#######[ SAVE ]######
+
+with open(saveFile,"r") as file: # open the file in read mode, make it the "file" variable
+        for line in file:
+            line = line.strip() # strip the line so its just the line itself
+            if line == "Theme = default":
+                defaultTheme()
+                break
+            elif line == "Theme = dark":
+                darkTheme()
+                break
+        else:
+            print("ERROR")
 
 ####################################################################################################################################
 ##########[ DONT TOUCH ]############[ DONT TOUCH ]#############[ DONT TOUCH ]############[ DONT TOUCH ]#########[ DONT TOUCH ]######
