@@ -43,13 +43,15 @@
 
 | OS:                  | STATUS: |
 | -------------------- |---------|
-| Raspberry Pi         | Broken  |
+| Raspberry Pi OS      | Broken  |
 | Linux                | Broken  |
 | (Sandbox) Windows 11 | Working | 
 | Windows 11           | Working |
 | Windows 10           | Working |
 | (Hyper-V) Windows 10 | Broken  |
+| Ubuntu [Raspberry OS]| Broken  |
 
+Note: "Broken" means that not all the features work.
 ---
 
 ## Limitations:
@@ -58,6 +60,7 @@
 - `Fetch WiFi Password` => Doesn't work in linux os
 -
 - `Linux  OS`  => UI misalignment issues will occur
+- `Linux OS` => Certain modules used may rely on the Windows library
 
 ---
 
